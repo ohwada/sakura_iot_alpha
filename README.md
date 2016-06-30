@@ -5,7 +5,7 @@
 
 ### WebSocket Client
 - javascript
-- sakura_iot_ws.py 
+- python sakura_iot_ws
 
 ### Blog (Japanese)
 http://android.ohwada.jp/archives/7045

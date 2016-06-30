@@ -2,4 +2,4 @@
 
 ### WebSocket Client
 - javascript
-- sakura_iot_ws.py 
+- python sakura_iot_ws
