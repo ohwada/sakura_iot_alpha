@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- parse the mesage from SAKURA IoT Platform -->
+<!-- 2016-06-20 K.OHWADA -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sakura IoT WebSocket</title>
+<script type="text/javascript" src="./jquery.min.js"></script>
+<script type="text/javascript">
+var TOKEN = "your_token";
+var URL = "wss://secure.sakura.ad.jp/iot-alpha/ws/" + TOKEN;
+var ws = null;
+// init
+function init() {
+    open();
+}
+// open   
+function open() {
+    if (ws == null) {
+        ws = new WebSocket(URL);
+        ws.onopen = onOpen;
+        ws.onmessage = onMessage;
+        ws.onclose = onClose;
+        ws.onerror = onError;
+    }
+}
+// onOpen
+function onOpen(event) {
+    dispMsg("connected");
+}
+// onMessage
+function onMessage(event) {
+    if (event && event.data) {
+        parseMessage(event.data);
+    }
+}
+// onError
+function onError(event) {
+    dispMsg("onError: " + event.data);
+}
+// onClose
+function onClose() {
+    dispMsg("disconected: " + event.code);
+    ws = null;
+    // re-connect
+    setTimeout("open()", 3000);
+}
+// parse Message
+function parseMessage(data) {      
+    var obj = JSON.parse(data);
+    if (obj.type == null) {
+        dispMsg(event.data);   
+    } else if (obj.type == "keepalive") {
+        parseKeepalive(obj)
+    } else if (obj.type == "channels") { 
+        parseChannels(obj);
+    }
+}
+// parse Keepalive
+function parseKeepalive(obj) { 
+    var text = "type: " + obj.type;
+    text += ", datetime: " + obj.datetime;
+    dispMsg(text)
+}
+// parse Channels
+function parseChannels(obj) { 
+    var channels = obj.payload.channels;
+    var len = channels.length;
+    for (i=0; i<len; i++) {
+        var ch = channels[len - i - 1];
+        text = "channel: " + ch.channel;
+        text += ", type: " + ch.type;
+        text += ". value: " + ch.value;
+        dispMsg(text)
+    }
+    var text = "type: " + obj.type;
+    text += ", datetime: " + obj.datetime;
+    text += ", module: " + obj.module;
+    dispMsg(text);
+}
+// dispMsg
+function dispMsg(message) {
+    var msgs = $("message").find("div");
+    while (msgs.length >= 100) {
+        msgs = msgs.last().remove();
+    }
+    var msgtag = $("<div>").text(message);
+    $("#message").prepend(msgtag);
+}
+// init
+$(init);
+</script>
+</head>
+<body>
+<h1>Sakura IoT WebSocket</h1>
+<div id="message"></div>
+</body>
+</html>
