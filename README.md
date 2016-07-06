@@ -11,6 +11,7 @@ Programs for SAKURA IoT Platform Alpha
 ### Wiring connection to Arduino
 
 |Sakura IoT|Arduino|
+|---|---|
 |1 UART TX (O)|D8 or D0|
 |2 UART RX (I)|D9 or D1|
 |3 GND|GND|
