@@ -2,9 +2,11 @@
 
 ## sakura_iot_sensor_1
 Web app display sensor data in graph <br/>
+
 Receive data from Sakura IoT Platform. <br/>
 Store data in MySQL database. <br/> 
 Read data from the database, and display in (Google Chart)[https://developers.google.com/chart/interactive/docs/gallery/linechart]. <br/>
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_sensor_1_system.png" width="300" />
 
 ### Requirements
 - OS: Linux <br/>
@@ -40,6 +42,7 @@ or service daemon <br/>
 ### Usage
 Access using web browser. <br/>
 http://YOUR_SERVER_URL:5050/ <br/>
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/graph_whole.png" width="200" />
 
 ### Blog (Japanese)
 http://android.ohwada.jp/archives/7077
