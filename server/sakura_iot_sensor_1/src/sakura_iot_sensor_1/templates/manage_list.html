@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- 2016-07-01 K.OHWADA -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Sakura IoT Sensor</title>
+</head>
+<body id="body">
+<h1>Sakura IoT</h1>
+<h3>Manage</h3>
+<a href="/">[Home]</a> <a href="/manage">[Manage]</a>
+<!-- add -->
+<a id="add_form" href="/manage?action=add_form">[Add Record]</a>
+<!-- login  -->
+<a href="/logout">[Logout]</a>
+<br />
+<!-- gen data form -->
+<form action="/manage" method="post">
+<input type="hidden" name="action" value="gen_data" />  
+<input type="submit" value="Gene
+rate Test Data" /> 
+</form>
+<!-- form end --> 
+<!-- delete all form -->
+<form action="/manage" method="post">
+<input type="hidden" name="action" value="delete_all" />  
+<input type="submit" value="Delete All" /> 
+</form>
+<!-- form end --> 
+<br />
+<!-- list -->
+<table>
+<tr><th></th><th>ID</th><th>Device</th><th>Time</th><th>Temperature</th><th>Humidity</th><th>Pressure</th><th>Light</th><th>Noise</th></tr>
+{% for row in rows %}
+	<tr>
+	<td><a href="/manage?action=edit_form&id={{ row["id"] }}">[Edit]</a></td>
+	<td>{{ row["id"] }}</td>
+	<td>{{ row["device"] }}</td>
+	<td>{{ row["formated_time"]  }}</td>
+	<td align="center">{{ row["temperature"] }}</td>
+	<td>{{ row["humidity"] }}</td>
+	<td>{{ row["pressure"] }}</td>
+	<td>{{ row["light"] }}</td>
+	<td>{{ row["noise"] }}</td>							
+	</tr>
+{% endfor %}
+</table>
+<!-- list end -->
+</body>
+</html>

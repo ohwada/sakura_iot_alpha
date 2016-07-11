@@ -2,11 +2,20 @@
 Programs for SAKURA IoT Platform Alpha
 
 ### Arduino
-- sakura_iot_serial
+- sakura_iot_fab_sensor <br/>
+  Send data obtained from sensors to Sakura IoT Platform <br/>
+- sakura_iot_serial <br/>
+  Connect Arduino monitor to the serial port of Sakura IoT comm board <br/>
+
+### Server
+- python sakura_iot_sensor_1 <br/>
+  Web app display sensor data in graph <br/>
 
 ### WebSocket Client
-- javascript
-- python sakura_iot_ws
+- javascript <br/>
+  Parse the mesage from SAKURA IoT Platform <br/>
+- python sakura_iot_ws <br/>
+  Parse the mesage from SAKURA IoT Platform <br/>
 
 ### Wiring connection to Arduino
 
@@ -26,4 +35,5 @@ Programs for SAKURA IoT Platform Alpha
 |12 +5V|+5V|
 
 ### Blog (Japanese)
-http://android.ohwada.jp/archives/7045
+- http://android.ohwada.jp/archives/7077
+- http://android.ohwada.jp/archives/7045

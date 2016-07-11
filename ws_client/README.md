@@ -1,5 +1,7 @@
 # SAKURA IoT Platform Alpha
 
 ### WebSocket Client
-- javascript
-- python sakura_iot_ws
+- javascript <br/>
+  Parse the mesage from SAKURA IoT Platform <br/>
+- python sakura_iot_ws <br/>
+  Parse the mesage from SAKURA IoT Platform <br/>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- 2016-07-01 K.OHWADA -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Sakura IoT Sensor</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/main.js"></script>
+<link rel="stylesheet" href="/static/css/style.css" />
+<script type="text/javascript">
+{% autoescape false %}
+var g_data_temp_humi = {{ param["datas"][0] }};
+var g_data_light_noise = {{ param["datas"][1] }};
+var g_data_press = {{ param["datas"][2] }};
+{% endautoescape %}
+// init
+$(init);
+</script>
+</head>
+<body id="body">
+<h3>Sakura IoT Sensor</h3>
+<a href="/">[Home]</a> <a href="/manage">[Manage]</a>
+<a href="/?r=day">[Day]</a> <a href="/?r=week">[Week]</a> <a href="/?r=month">[Month]</a><a href="/?r=year">[Year]</a><br /><br />
+<div id="error">{{ param["error"] }}</div>
+<div>{{ param["datetime"] }}</div>
+<div id="chart_temp_humi"></div>
+<div id="chart_light_noise"></div>
+<div id="chart_pressure"></div>
+</body>
+</html>

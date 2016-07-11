@@ -1,8 +1,10 @@
 # WebSocket Client - SAKURA IoT Platform Alpha
 
-### sakura_iot_ws.py
-requirement [websocket-client](https://pypi.python.org/pypi/websocket-client) <br/>
-parse the mesage from SAKURA IoT Platform <br/>
+## sakura_iot_ws.py
+Parse the mesage from SAKURA IoT Platform <br/>
+
+### Eequirement 
+[websocket-client](https://pypi.python.org/pypi/websocket-client) <br/>
 
 ### Result
 type: channels <br/>
