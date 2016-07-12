@@ -6,6 +6,11 @@ from sensor_util import SensorUtil
 
 # SensorMain
 class SensorMain():
+	RANGE_PERIOD = "period"
+#	RANGE_DAY = "day"
+	RANGE_WEEK = "week"
+	RANGE_MONTH = "month"
+	RANGE_YEAR = "year"
 	SEC_DAY = 24 * 60 * 60 # one day in seconds
 	SEC_WEEK = 7 * SEC_DAY # one week
 	SEC_MONTH = 30 * SEC_DAY # one month	
@@ -44,45 +49,42 @@ class SensorMain():
 		return param
 
 	def getRecordsTimeRange(self, range, start_in, end_in ):
-		start1, end1 = self.calcPeriodTime( range, start_in, end_in )
-		count1 = self.db.countTableItemTime( start1, end1 )
-		if (count1 > 0) and (count1 <= self.SQL_LIMIT):
-			# reads the data, If within the limit
-			rows1 = self.db.readTableItemTime( start1, end1, self.SQL_LIMIT)
-			ret = { "count":count1, "rows":rows1 }
-			return ret
-		elif count1 > self.SQL_LIMIT:
-			# read out thinning, if exceeds the limit
-			skip2 = int( count1 / self.SQL_LIMIT )
-			rows2 = self.db.readTableItemTimeSkip( start1, end1, skip2, 2 * self.SQL_LIMIT )
-			ret = { "count":count1, "rows":rows2 }
-			return ret
-		else:
+		start, end = self.calcPeriodTime( range, start_in, end_in )
+		count = self.db.countTableItemTime( start, end )
+		if count == 0:
 			# read the latest data, if no data in the time range
-			rows3 = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
-			len3 = len(rows3)
-			if len3 > 0:
-				# data exists
-				ret = { "count":len3, "rows":rows3 }
-				return ret
-		# return empty, if no data		
-		return {}
-
+			rows0 = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
+			len0 = len(rows0)
+			if len0 > 0:
+			# data exists
+				ret0 = { "count":len0, "rows":rows0 }
+				return ret0
+		elif count <= self.SQL_LIMIT:
+			# reads the data, If within the limit
+			rows1 = self.db.readTableItemTime( start, end, self.SQL_LIMIT)
+			ret1 = { "count":count, "rows":rows1 }
+			return ret1
+		# read out thinning, if exceeds the limit
+		skip2 = int( count / self.SQL_LIMIT )
+		rows2 = self.db.readTableItemTimeSkip( start, end, skip2, 2 * self.SQL_LIMIT )
+		ret2 = { "count":count, "rows":rows2 }
+		return ret2
+						
 	def calcPeriodTime(self, range, start_in, end_in ):
-		if range == "period":
+		if range == self.RANGE_PERIOD:
 			# convert start time and end time	
 			# when specify "period"
 			start = self.util.convUnixtime( start_in )
 			end  = self.util.convUnixtime( end_in )
 			return [ start, end ]
-		elif range == "week":
+		elif range == self.RANGE_WEEK:
 			# convert one week in seconds
 			# when specify "week"
 			sec = self.SEC_WEEK
-		elif range == "month":
+		elif range == self.RANGE_MONTH:
 			# convert one month in seconds
 			sec = self.SEC_MONTH		
-		elif range == "year":
+		elif range == self.RANGE_YEAR:
 			# convert one year in seconds
 			sec = self.SEC_YEAR	
 		else:

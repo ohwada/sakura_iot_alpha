@@ -1,7 +1,11 @@
 # Arduino - SAKURA IoT Platform Alpha
 
 ## sakura iot fab sensor
-Send data obtained from sensors to Sakura IoT Platform
+Send data obtained from sensors to Sakura IoT Platform <br/>
+
+[Server side program](https://github.com/ohwada/sakura_iot_alpha/tree/master/server/sakura_iot_fab_sensor) <br/>
+
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_system.png" width="500" />
 
 ### Hardware
 [Arduino Sensor Shield](https://github.com/FabLabKannai/sensor) <br/>

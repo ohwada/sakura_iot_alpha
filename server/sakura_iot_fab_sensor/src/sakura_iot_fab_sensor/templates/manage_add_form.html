@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<!-- 2016-07-01K.OHWADA  -->
+<!-- 2016-07-01 K.OHWADA -->
 <html>
 <head>
 <meta charset="utf-8">
-<title>Sakura IoT Sensor</title>
+<title>Sakura IoT Fab Sensor</title>
 </head>
 <body id="body">
-<h3>Manage</h3>
+<h3>Manage</h3>	
 <a href="/">[Home]</a> <a href="/manage">[Manage]</a>
 <br />
-<div>{{ params["error"] }}</div>	
-<!-- edit form -->
+<!-- add form -->
 <form action="/manage" method="post">
 <input type="hidden" name="action" value="{{ params["action"] }}" />
 <input type="hidden" name="id" value="{{ params["id"] }}" /> 
@@ -20,13 +19,6 @@
 {% endfor %}
 <tr><td></td><td><input type="submit" value="submit" /></td><tr>
 </table> 
-</form>
-<!-- form end -->
-<!-- delete form -->
-<form action="/manage" method="post">
-<input type="hidden" name="action" value="delete" />
-<input type="hidden" name="id" value="{{ params["id"] }}" />   
-<input type="submit" value="Delete" /> 
 </form>
 <!-- form end -->
 </body>

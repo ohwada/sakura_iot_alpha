@@ -11,7 +11,7 @@ from sensor_util import SensorUtil
 
 # Flask start	
 app = Flask(__name__)
-app.secret_key = 'koh6GaBo'
+app.secret_key = 'koh6GaBo' # random characters
 app.config['SESSION_TYPE'] = 'filesystem'
 
 util = SensorUtil()
@@ -20,22 +20,32 @@ util = SensorUtil()
 g_db = None
 g_conf = ''
 
+# future use
+g_signature = ''
+
 # server_run
 def server_run(host, port, conf):
-	global g_db, g_conf
+	global g_db, g_conf, g_signature
 	g_conf = conf
 	obj = util.readConf( conf )
 	if obj:
+		# set param, if the contents of the file is correct 
 		g_db = util.connect( obj["db_name"], obj["db_user"], obj["db_passwd"], obj["db_timeout"] )
 		app.config['USERNAME'] = obj["login_username"]
 		app.config['PASSWORD'] = obj["login_password"]
+		# future use
+		g_signature = obj["sakura_secret"]
+		if not g_db:
+			# if can not connect db
+			print "check " + g_conf
 	app.run(host=str(host), port=int(port))
 
 # route index
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def route_main():
 	if not g_db:
-		return render_template('notice.html', conf=g_conf)
+		# if db param are not set
+		return render_template('notice.html', conf=g_conf)	
 	main = SensorMain(g_db)		
 	param = main.excute( request.args )
 	return render_template('index.html', param=param)
@@ -46,9 +56,11 @@ def route_main():
 @app.route('/post', methods=['POST'])
 def route_post():
 	if not g_db:
+		# if db param are not set
 		return ""
 	if request.method == 'POST':
-#		print request.headers.get("X-Sakura-Signature")	
+		# future use
+		# if request.headers.get("X-Sakura-Signature") == g_signature
 		post = SensorPost( g_db )
 		post.excute( request.data )
 	return ""
@@ -57,8 +69,10 @@ def route_post():
 @app.route('/manage', methods=['POST', 'GET'])
 def route_manage():
 	if not g_db:
-		return redirect(url_for('route_main'))		
+		# if db param are not set
+		return redirect(url_for('route_main'))	
 	if not session.get('logged_in'):
+		# if not login
 		return redirect(url_for('route_login'))	
 	manage = SensorManage( g_db )
 	if request.method == 'GET':
@@ -82,16 +96,20 @@ def route_manage():
 def route_login():
 	error = None
 	if app.config['USERNAME'] is None:
+		# if password param are not set
 		return redirect(url_for('route_main'))		
 	if request.method == 'POST':
+		# post
 		if request.form['username'] != app.config['USERNAME']:
 			error = 'Invalid username'
 		elif request.form['password'] != app.config['PASSWORD']:
 			error = 'Invalid password'
 		else:
+			# login, if pass check 
 			session['logged_in'] = True
 			flash('You were logged in')
 			return redirect(url_for('route_manage'))
+	# when not login		
 	return render_template('login.html', error=error)
 
 @app.route('/logout')

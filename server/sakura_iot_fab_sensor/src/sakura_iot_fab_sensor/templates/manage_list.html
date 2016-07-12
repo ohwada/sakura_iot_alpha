@@ -3,11 +3,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Sakura IoT Sensor</title>
+<title>Sakura IoT Fab Sensor</title>
 </head>
 <body id="body">
-<h1>Sakura IoT</h1>
-<h3>Manage</h3>
+<h3>Sakura IoT Fab Sensor</h3>
+<h1>Manage</h1>
 <a href="/">[Home]</a> <a href="/manage">[Manage]</a>
 <!-- add -->
 <a id="add_form" href="/manage?action=add_form">[Add Record]</a>
@@ -30,12 +30,12 @@ rate Test Data" />
 <br />
 <!-- list -->
 <table>
-<tr><th></th><th>ID</th><th>Device</th><th>Time</th><th>Temperature</th><th>Humidity</th><th>Pressure</th><th>Light</th><th>Noise</th></tr>
+<tr><th></th><th>ID</th><th>Module</th><th>Time</th><th>Temperature</th><th>Humidity</th><th>Pressure</th><th>Light</th><th>Noise</th></tr>
 {% for row in rows %}
 	<tr>
 	<td><a href="/manage?action=edit_form&id={{ row["id"] }}">[Edit]</a></td>
 	<td>{{ row["id"] }}</td>
-	<td>{{ row["device"] }}</td>
+	<td>{{ row["module"] }}</td>
 	<td>{{ row["formated_time"]  }}</td>
 	<td align="center">{{ row["temperature"] }}</td>
 	<td>{{ row["humidity"] }}</td>

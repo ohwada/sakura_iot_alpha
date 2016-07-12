@@ -7,7 +7,7 @@ from sensor_util import SensorUtil
 import argparse
 
 # constant
-APP_NAME = "sakura_iot_sensor_1"
+APP_NAME = "sakura_iot_fab_sensor"
 SERVER_HOST_DEFAULT = "0.0.0.0"
 SERVER_PORT_DEFAULT = 5050
 

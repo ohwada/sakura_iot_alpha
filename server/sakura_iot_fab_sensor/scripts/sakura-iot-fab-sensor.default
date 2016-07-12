@@ -1,5 +1,5 @@
-# Configuration for /etc/init.d/sakura-iot-sensor-1
-# 2016-05-01 K.OHWADA @ FabLab Kannai
+# Configuration for /etc/init.d/sakura-iot-fab-sensor
+# 2016-07-01 K.OHWADA
 
 # The init.d script will only run if this variable non-empty.
 SAKURA_USER=ohwada
@@ -11,9 +11,9 @@ HOST="0.0.0.0"
 PORT=5050
 
 # Path to the executable file, use this to override the 
-DAEMON=/home/$SAKURA_USER/virtualenv/venv/bin/sakura_iot_sensor_1
+DAEMON=/home/$SAKURA_USER/virtualenv/venv/bin/sakura_iot_fab_sensor
 
-# What arguments to pass to sumobot-web-sample, usually no need to touch this
+# What arguments to pass to main program, usually no need to touch this
 DAEMON_ARGS="--host=$HOST --port=$PORT"
 
 # Umask of files sumobot-web-sample generates, Change this to 000 if running sumobot-web-sample as its own, separate user

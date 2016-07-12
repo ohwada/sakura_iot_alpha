@@ -1,8 +1,8 @@
 #!/bin/sh
-# 2016-05-01 K.OHWADA @ FabLab Kannai
+# 2016-07-01 K.OHWADA
 
 ### BEGIN INIT INFO
-# Provides:          sakura-iot-sensor-1
+# Provides:          sakura-iot-fab-sensor
 # Required-Start:    $local_fs networking
 # Required-Stop:
 # Should-Start:
@@ -11,20 +11,20 @@
 # Default-Stop:      0 1 6
 # Short-Description: Sukura IoT daemon
 # Description:       Starts the Sukura IoT daemon with the user specified in
-#                    /etc/default/sakura-iot-sensor-1.
+#                    /etc/default/sakura-iot-fab-sensor.
 ### END INIT INFO
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Sukura IoT Daemon"
-NAME="Sukura IoT Sensor 1"
-PIDFILE=/var/run/sakura-iot-sensor-1.pid
-PKGNAME=sakura-iot-sensor-1
+NAME="Sukura IoT Fab Sensor"
+PIDFILE=/var/run/sakura-iot-fab-sensor.pid
+PKGNAME=sakura-iot-fab-sensor
 SCRIPTNAME=/etc/init.d/$PKGNAME
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$PKGNAME ] && . /etc/default/$PKGNAME
 
-# Exit if the sakura-iot-sensor-1 is not installed
+# Exit if the sakura-iot-fab-sensor is not installed
 [ -x "$DAEMON" ] || exit 0
 
 # Load the VERBOSE setting and other rcS variables

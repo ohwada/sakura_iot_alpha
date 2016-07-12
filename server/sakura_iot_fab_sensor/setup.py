@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# sakura_iot_sensor_1
+# sakura_iot_fab_sensor
 # 2016-05-01 K.OHWADA @ FabLab Kannai
 
 from setuptools import setup, find_packages
@@ -29,7 +29,7 @@ EXTRA_REQUIRES = dict()
 
 # general setup configuration
 def params():
-    name ="SakuraIotSensor1"
+    name ="SakuraIotFabSensor"
     version ="0.1"
     description ="Sakura IoT Sensor"
 
@@ -67,7 +67,7 @@ def params():
        "":"src"
     }
     package_data = {
-       "sakura_iot_sensor_1": sakura_setuptools.package_data_dirs("src/sakura_iot_sensor_1", ["static", "templates", "conf"])
+       "sakura_iot_fab_sensor": sakura_setuptools.package_data_dirs("src/sakura_iot_fab_sensor", ["static", "templates", "conf"])
     }
 
     include_package_data = True
@@ -81,7 +81,7 @@ def params():
 
     entry_points = {
         "console_scripts": [
-            "sakura_iot_sensor_1 = sakura_iot_sensor_1:main"
+            "sakura_iot_fab_sensor = sakura_iot_fab_sensor:main"
         ]
     }
 
