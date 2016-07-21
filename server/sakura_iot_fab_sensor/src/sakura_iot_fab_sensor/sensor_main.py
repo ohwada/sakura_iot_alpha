@@ -6,6 +6,7 @@ from sensor_util import SensorUtil
 
 # SensorMain
 class SensorMain():
+	ERROR_COUNT = SensorDb.ERROR_COUNT
 	RANGE_PERIOD = "period"
 #	RANGE_DAY = "day"
 	RANGE_WEEK = "week"
@@ -20,11 +21,13 @@ class SensorMain():
 	SQL_OFFSET = 0 # no offset
 	SQL_LIMIT = 24 * 60  # the number of data per day
 	DATE_FORMAT = "%Y-%m-%d %H:%M"
-	
+
+	app = None	
 	db = None
 	util = None
 
-	def __init__(self, db):
+	def __init__(self, app, db):
+		self.app = app
 		self.db = db
 		self.util = SensorUtil()
 
@@ -34,42 +37,43 @@ class SensorMain():
 		end_in = args.get('e', '')
 		datas = ['', '', '']
 		dt = ""
-		error = ""
-		ret = self.getRecordsTimeRange( range, start_in, end_in )
-		if len(ret) > 0:
-			# valid data
-			count  = ret["count"]
-			rows = ret["rows"]			
+		msg = ""
+		count, rows = self.getRecordsTimeRange( range, start_in, end_in )
+		if (count == self.ERROR_COUNT) or (rows is None):
+			# error
+			error = self.db.getError()
+			print error
+			self.app.logger.error( error )	
+			msg = "No Data"		
+		elif count == 0:
+			# no data
+			msg = "No Data"	
+		else:
+			# valid data	
 			dt = self.getHeaderDateTime( count, rows ) 
 			datas = self.makeChartData( rows )
-		else:
-			# no data
-			error = "No Data"
-		param = { "datas":datas, "datetime":dt, "error":error }
+		param = { "datas":datas, "datetime":dt, "error":msg }
 		return param
 
+	# @return dict
 	def getRecordsTimeRange(self, range, start_in, end_in ):
 		start, end = self.calcPeriodTime( range, start_in, end_in )
 		count = self.db.countTableItemTime( start, end )
-		if count == 0:
+		if count == self.ERROR_COUNT:
+			return [self.ERROR_COUNT, None]
+		elif count == 0:
 			# read the latest data, if no data in the time range
 			rows0 = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
-			len0 = len(rows0)
-			if len0 > 0:
-			# data exists
-				ret0 = { "count":len0, "rows":rows0 }
-				return ret0
+			return [len(rows0), rows0]
 		elif count <= self.SQL_LIMIT:
 			# reads the data, If within the limit
-			rows1 = self.db.readTableItemTime( start, end, self.SQL_LIMIT)
-			ret1 = { "count":count, "rows":rows1 }
-			return ret1
+			rows1 = self.db.readTableItemTime( start, end, self.SQL_LIMIT )		
+			return [count, rows1]
 		# read out thinning, if exceeds the limit
 		skip2 = int( count / self.SQL_LIMIT )
 		rows2 = self.db.readTableItemTimeSkip( start, end, skip2, 2 * self.SQL_LIMIT )
-		ret2 = { "count":count, "rows":rows2 }
-		return ret2
-						
+		return [count, rows2]
+					
 	def calcPeriodTime(self, range, start_in, end_in ):
 		if range == self.RANGE_PERIOD:
 			# convert start time and end time	
@@ -94,7 +98,7 @@ class SensorMain():
 		start = end - sec
 		return [ start, end ]
 			
-	def getHeaderDateTime(self, count, rows ):
+	def getHeaderDateTime(self, count, rows):
 		length = len( rows )
 		first = rows[0]["time"]
 		last = rows[ length - 1 ]["time"]

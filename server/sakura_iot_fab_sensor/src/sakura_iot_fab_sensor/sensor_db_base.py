@@ -5,6 +5,8 @@ import MySQLdb
 
 # SensorDbBase
 class SensorDbBase():
+	ERROR_COUNT = -1
+			
 	DB_HOST = "localhost"
 	DB_CHARSET = "utf8"
 	DEBUG = True
@@ -65,7 +67,7 @@ class SensorDbBase():
 	def selectById(self, table, id):
 		sql = "SELECT * FROM " + table + " WHERE id=" + str(int(id))
 		return self.getResultDict( sql )
-		
+
 	def selectAll(self, table, where, order, limit, offset):
 		sql = "SELECT * FROM " + table + " " + where + " ORDER BY id " + order
 		if limit > 0:
@@ -119,39 +121,51 @@ class SensorDbBase():
 			self. setExecuteError(sql)
 		return ret
 
+	# @return int
 	def getResultCount(self, sql):
 		self.clearMysqlError()
 		self.clearError()
 		cursor = self.conn.cursor()
+		if cursor is None:
+			self.addError("cannot get cursor")
+			return self.ERROR_COUNT 	
 		ret = self.executeCursor(cursor, sql)
 		result = None
 		if ret:
 			result = self.fetchonelCursor(cursor)
 		cursor.close()
-		if result is None:
-			self. setExecuteError(sql)
-		return result[0]
-		
+		if (result is None) or (result[0] is None):
+			self.setExecuteError(sql)
+			return self.ERROR_COUNT
+		return int( result[0] )
+
 	def getResultList(self, sql):
 		self.clearMysqlError()
 		self.clearError()
 		cursor = self.conn.cursor()
+		if cursor is None:
+			self.addError("cannot get cursor")
+			return None
 		return self.getResultCommon( cursor, sql )
 
 	def getResultDict(self, sql):
 		self.clearMysqlError()
 		self.clearError()
 		cursor = self.conn.cursor( MySQLdb.cursors.DictCursor )
+		if cursor is None:
+			self.addError("cannot get cursor")
+			return None
 		return self.getResultCommon( cursor, sql )
 
 	def getResultCommon(self, cursor, sql):
-		ret = self.executeCursor(cursor, sql)
 		result = None
+		ret = self.executeCursor(cursor, sql)
 		if ret:
 			result = self.fetchallCursor(cursor)	
 		cursor.close()
 		if result is None:
-			self. setExecuteError(sql)
+			self.setExecuteError(sql)
+			return None
 		return result
 
 	def executeCursor(self, cursor, sql):

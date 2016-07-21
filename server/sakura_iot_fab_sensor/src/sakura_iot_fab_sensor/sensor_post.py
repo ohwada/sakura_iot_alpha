@@ -19,23 +19,30 @@ import json
 # SensorPost
 class SensorPost():
 
+	app = None
 	db = None
 	util = None
 	
-	def __init__(self, db):
+	def __init__(self, app, db):
+		self.app = app
 		self.db = db
 		self.util = SensorUtil()
 
 	def excute(self, data):
 		if not data: 
-			print "param error: no data"
-			return;
-		obj = json.loads(data)
+			error = "param error: no data"
+			print error
+			self.app.logger.error( error )	
+			return
+		obj = json.loads( data )
 		if (obj["type"] is None) or (obj["type"] != "channels"):
-			print "param error: " + str(data)
+			error = "param error: " + str(data)
+			print error
+			self.app.logger.error( error )	
 			return
 		# type is "channels"
-		self.parseChannels(obj)
+		self.app.logger.debug( data )
+		self.parseChannels( obj )
 
 	def parseChannels(self, obj):
 		unixtime = self.util.convUnixtime( obj["datetime"] )
@@ -50,11 +57,12 @@ class SensorPost():
 			if (ch_type == 'f') and (ch_num >= 0) and (ch_num <= 4):				
 				# rearrange, if expect format
 				new_chs[ ch_num ] = float( ch["value"] )
-			else:				
+			else:	
 				# if otherwise
-				print "param error: ",
-				pprint(ch)
+				error = "param error: " + pprint.pformat( ch )
+				print error
+				self.app.logger.error( error )	
 		# save to database		
 		self.db.insertTableItem( unixtime, module, new_chs[0], new_chs[1], new_chs[2], new_chs[3], new_chs[4] )
-
+				
 # class end

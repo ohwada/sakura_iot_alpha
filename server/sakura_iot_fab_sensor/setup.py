@@ -30,7 +30,7 @@ EXTRA_REQUIRES = dict()
 # general setup configuration
 def params():
     name ="SakuraIotFabSensor"
-    version ="0.1"
+    version ="0.2"
     description ="Sakura IoT Sensor"
 
     install_requires = INSTALL_REQUIRES

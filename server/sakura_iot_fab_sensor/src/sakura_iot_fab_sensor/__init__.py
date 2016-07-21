@@ -25,8 +25,7 @@ def main():
     host = util.initParam(args.host, SERVER_HOST_DEFAULT)
     port = util.initParam(args.port, SERVER_PORT_DEFAULT)
     basedir = util.initBasedir(args.basedir, APP_NAME)
-    conf = util.initConfig( basedir )
-    server_run( host, port, conf )
+    server_run( host, port, basedir )
 
 if __name__ == "__main__":
     main()
