@@ -34,6 +34,9 @@ Programs for SAKURA IoT Platform Alpha
 |11 GND|GND|
 |12 +5V|+5V|
 
+### Case
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_case_board.png" width="500" />
+
 ### Blog (Japanese)
 - http://android.ohwada.jp/archives/7077
 - http://android.ohwada.jp/archives/7045
