@@ -14,9 +14,10 @@ import time
 class SensorUtil():
 
 	TIME_ZONE = 9 # JST (UTC+9)
-		
-	def connect(self, name, user, passwd, timeout):
+
+	def connect(self, name, user, passwd, timeout, logger):
 		db = SensorDb()
+		db.setLogger(logger)
 		# wait for connect
 		# because MySQL is not started
 		# when the power is turned on
@@ -120,10 +121,5 @@ class SensorUtil():
 		# UTC -> Local
 		local = dt + datetime.timedelta( hours=self.TIME_ZONE )
 		return local.strftime( format )
-
-	def convUnixtime(self, text):
-		dt = dateutil.parser.parse(text)
-		unix = int(time.mktime(dt.timetuple()))
-		return unix
 
 # class end

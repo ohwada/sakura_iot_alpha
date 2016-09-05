@@ -2,33 +2,35 @@
 # 2016-07-01 K.OHWDA
 
 import MySQLdb
+import sys
+import traceback
 
 # SensorDbBase
 class SensorDbBase():
-	ERROR_COUNT = -1
 			
 	DB_HOST = "localhost"
 	DB_CHARSET = "utf8"
 	DEBUG = True
 
+	LF = "\n"
 	OFFSET_ZERO = 0
 	LIMIT_ONE = 1
-	
+	DEBUG = True
+
+	logger = None
 	conn = None
-	sql = ''
-    	errors = []
-	mysql_errors = []
+
+	def setLogger(self, logger):
+		self.logger = logger
 
 	def connect(self, db, user, passwd):
+		ret = False
 		try:
 			self.conn = MySQLdb.connect( host=self.DB_HOST, db=db, user=user, passwd=passwd, charset=self.DB_CHARSET )
-		except MySQLdb.OperationalError as e:
-			print e
-		if self.conn is None: 
-			self.addError( "mysql connect failed" )
-			self.addMysqlError()
-			return False
-		return True
+			ret = True
+		except:
+			self.printExcept()
+		return ret
 
 	def close(self):
 		self.conn.close()
@@ -63,7 +65,7 @@ class SensorDbBase():
 		if not rows:
 			return None
 		return rows[0]
-		
+
 	def selectById(self, table, id):
 		sql = "SELECT * FROM " + table + " WHERE id=" + str(int(id))
 		return self.getResultDict( sql )
@@ -83,24 +85,36 @@ class SensorDbBase():
 		return rows[0]
 
 	def insert(self, table, params):
-		keys = []
-		values = []
-		for k, v in params.items():
-			keys.append( str(k) )
-			values.append( self.escape( v ))
-		str_key = ", ".join(keys)
-		str_value = ", ".join(values)
-		sql = "INSERT INTO " + table + " (" + str_key + ") VALUES (" + str_value  + ")"
-		print sql
-		return self.execute( sql )
+		ret = False
+		if params is None: return ret
+		try:
+			keys = []
+			values = []
+			for k, v in params.items():
+				keys.append( str(k) )
+				values.append( self.escape( v ))
+			str_key = ", ".join(keys)
+			str_value = ", ".join(values)
+			sql = "INSERT INTO " + table + " (" + str_key + ") VALUES (" + str_value  + ")"
+			if self.DEBUG: print sql
+			ret = self.execute( sql )
+		except:
+			self.printExcept()		
+		return ret
 
 	def update(self, table, id, params):
-		sets = []
-		for k, v in params.items():
-			sets.append( str(k) + "=" + self.escape( v ) )
-		str_set = ", ".join(sets)
-		sql = "UPDATE " + table + " SET " + str_set + " WHERE id=" + str(int(id))
-		return self.execute( sql )
+		ret = False
+		if params is None: return ret
+		try:
+			sets = []
+			for k, v in params.items():
+				sets.append( str(k) + "=" + self.escape( v ) )
+			str_set = ", ".join(sets)
+			sql = "UPDATE " + table + " SET " + str_set + " WHERE id=" + str(int(id))
+			ret = self.execute( sql )
+		except:
+			self.printExcept()		
+		return ret
 
 	def delete(self, table, id):
 		sql = "DELETE FROM " + table + " WHERE id=" + str(int(id))
@@ -111,123 +125,50 @@ class SensorDbBase():
 		return text
 
 	def execute(self, sql):
-		self.clearMysqlError()
-		self.clearError()
-		cursor = self.conn.cursor()      
-		ret = self.executeCursor(cursor, sql)
-		self.conn.commit()      
-		cursor.close()
-		if not ret:
-			self. setExecuteError(sql)
-		return ret
-
-	# @return int
-	def getResultCount(self, sql):
-		self.clearMysqlError()
-		self.clearError()
-		cursor = self.conn.cursor()
-		if cursor is None:
-			self.addError("cannot get cursor")
-			return self.ERROR_COUNT 	
-		ret = self.executeCursor(cursor, sql)
-		result = None
-		if ret:
-			result = self.fetchonelCursor(cursor)
-		cursor.close()
-		if (result is None) or (result[0] is None):
-			self.setExecuteError(sql)
-			return self.ERROR_COUNT
-		return int( result[0] )
-
-	def getResultList(self, sql):
-		self.clearMysqlError()
-		self.clearError()
-		cursor = self.conn.cursor()
-		if cursor is None:
-			self.addError("cannot get cursor")
-			return None
-		return self.getResultCommon( cursor, sql )
-
-	def getResultDict(self, sql):
-		self.clearMysqlError()
-		self.clearError()
-		cursor = self.conn.cursor( MySQLdb.cursors.DictCursor )
-		if cursor is None:
-			self.addError("cannot get cursor")
-			return None
-		return self.getResultCommon( cursor, sql )
-
-	def getResultCommon(self, cursor, sql):
-		result = None
-		ret = self.executeCursor(cursor, sql)
-		if ret:
-			result = self.fetchallCursor(cursor)	
-		cursor.close()
-		if result is None:
-			self.setExecuteError(sql)
-			return None
-		return result
-
-	def executeCursor(self, cursor, sql):
 		ret = False
 		try:
+			cursor = self.conn.cursor()
 			cursor.execute(sql)
+			self.conn.commit()      
+			cursor.close()
 			ret = True
-		except MySQLdb.Error, e:
-			try:
-        			self.setMysqlError( "[%d]: %s" % (e.args[0], e.args[1]) )
-    			except IndexError:
-        			self.setMysqlError( str(e) )
-        	return ret
+		except:
+			self.printExcept()
+		return ret
 
-	def fetchonelCursor(self, cursor):
-		result = None
+	def getResultCount(self, sql):
+		ret = None
 		try:
+			cursor = self.conn.cursor()
+			cursor.execute(sql)
 			result = cursor.fetchone()
-		except MySQLdb.Error, e:
-			try:
-        			self.setMysqlError( "[%d]: %s" % (e.args[0], e.args[1]) )
-    			except IndexError:
-        			self.setMysqlError( str(e) )	
-		return result
-
-	def fetchallCursor(self, cursor):
+			cursor.close()
+			ret = int( result[0] )
+		except:
+			self.printExcept()
+		return ret
+		
+	def getResultList(self, sql):
 		result = None
 		try:
+			cursor = self.conn.cursor()
+			cursor.execute(sql)
 			result = cursor.fetchall()
-		except MySQLdb.Error, e:
-			try:
-        			self.setMysqlError( "[%d]: %s" % (e.args[0], e.args[1]) )
-    			except IndexError:
-        			self.setMysqlError( str(e) )	
+			cursor.close()
+		except:
+			self.printExcept()
 		return result
-        			
-	def setExecuteError(self, sql):
-    		self.addError( sql )
-    		self.addMysqlError()
-    		if self.DEBUG:
-    			print self.getError()
 
-	def clearMysqlError(self):
-		self.mysql_errors = []
-
-	def setMysqlError(self, err):
-		self.mysql_errors.append( err )
-
-	def addMysqlError(self):
-		if len(self.mysql_errors) == 0: return
-		for err in self.mysql_errors:
-			self.addError( "MySQL: " + err )
-
-	def clearError(self):
-		self.errors = []
-
-	def addError(self, error):    
-		self.errors.append( error )
-
-	def getError(self, glue="\n"):
-		if len( self.errors ) == 0: return ""
-		return glue.join( self.errors )
+	def getResultDict(self, sql):
+		result = None
+		try:
+			cursor = self.conn.cursor( MySQLdb.cursors.DictCursor )
+			cursor.execute(sql)
+			result = cursor.fetchall()
+			cursor.close()
+		except:
+			self.printExcept()
+		return result
 
 	def printResultList(self, result):
 		for row in result:
@@ -240,5 +181,17 @@ class SensorDbBase():
 			for k, v in row.items():
 				print str(k) + ":" + str(v) + ", ",
 			print ""
-			
+
+	def printExcept(self):
+		info = sys.exc_info()
+		msg = "DB Error:" + self.LF
+		msg += str(info[0]) + self.LF
+		msg += str(info[1]) + self.LF
+		tbinfo = traceback.format_tb( info[2] )
+		for tb in tbinfo:
+			msg += tb + self.LF
+		if self.logger:
+			self.logger.error(msg)
+		print msg
+		            			
 # class end

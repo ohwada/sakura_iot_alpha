@@ -17,7 +17,7 @@ class SensorDb(SensorDbBase):
 		if not self.existsTable( self.TABLE_ITEM ):
 			ret = self.createTableItem()
 			if not ret:
-				print self.getError()
+				# stop program, if error
 				exit()
 			print "Created table " + self.TABLE_ITEM
 
@@ -79,7 +79,7 @@ class SensorDb(SensorDbBase):
 		return self.insert( 
 			self.TABLE_ITEM, 
 			self.makeParamsTableItem( time, module, temp, humi, pressure, light, noise ) )
-	
+
 	def updateTableItem(self, id, time, module, temp, humi, pressure, light, noise):
 		return self.update( 
 			self.TABLE_ITEM, id, 
@@ -95,16 +95,20 @@ class SensorDb(SensorDbBase):
 	def deleteAllTableItem(self):
 		return self.truncateTable( self.TABLE_ITEM )
 
-	def makeParamsTableItem(self, time, module, temp, humi, pressure, light, noise):			
-		params = { \
-			"time":int( time ), \
-			"module": str( module ), \
-			"temperature": float( temp ), \
-			"humidity": float( humi ), \
-			"pressure": float( pressure ), \
-			"light": float( light ), \
-			"noise": float( noise ) \
-		}
+	def makeParamsTableItem(self, time, module, temp, humi, pressure, light, noise):		
+		params = None
+		try:	
+			params = { \
+				"time":int( time ), \
+				"module": str( module ), \
+				"temperature": float( temp ), \
+				"humidity": float( humi ), \
+				"pressure": float( pressure ), \
+				"light": float( light ), \
+				"noise": float( noise ) \
+			}
+		except:
+			self.printExcept()			
 		return params	
 
 	def makeFormTableItem(self, time, module, temp, humi, pressure, light, noise):

@@ -1,0 +1,3 @@
+# version
+# 2016-07-01 K.OHWADA
+VERSION ="0.3"

@@ -6,7 +6,6 @@ from sensor_util import SensorUtil
 
 # SensorMain
 class SensorMain():
-	ERROR_COUNT = SensorDb.ERROR_COUNT
 	RANGE_PERIOD = "period"
 #	RANGE_DAY = "day"
 	RANGE_WEEK = "week"
@@ -22,13 +21,13 @@ class SensorMain():
 	SQL_LIMIT = 24 * 60  # the number of data per day
 	DATE_FORMAT = "%Y-%m-%d %H:%M"
 
-	app = None	
 	db = None
+	logger = None
 	util = None
 
-	def __init__(self, app, db):
-		self.app = app
+	def __init__(self, db, logger):
 		self.db = db
+		self.logger = logger
 		self.util = SensorUtil()
 
 	def excute(self, args):
@@ -39,11 +38,11 @@ class SensorMain():
 		dt = ""
 		msg = ""
 		count, rows = self.getRecordsTimeRange( range, start_in, end_in )
-		if (count == self.ERROR_COUNT) or (rows is None):
+		if (count is None) or (rows is None):
 			# error
 			error = self.db.getError()
 			print error
-			self.app.logger.error( error )	
+			self.logger.error( error )	
 			msg = "No Data"		
 		elif count == 0:
 			# no data
@@ -59,8 +58,8 @@ class SensorMain():
 	def getRecordsTimeRange(self, range, start_in, end_in ):
 		start, end = self.calcPeriodTime( range, start_in, end_in )
 		count = self.db.countTableItemTime( start, end )
-		if count == self.ERROR_COUNT:
-			return [self.ERROR_COUNT, None]
+		if count is None:
+			return [count, None]
 		elif count == 0:
 			# read the latest data, if no data in the time range
 			rows0 = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )

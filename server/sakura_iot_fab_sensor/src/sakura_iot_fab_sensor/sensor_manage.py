@@ -14,10 +14,12 @@ class SensorManage():
 	TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 	db = None
+	logger = None
 	util = None
 
-	def __init__(self, db):
+	def __init__(self, db, logger):
 		self.db = db
+		self.logger = logger
 		self.util = SensorUtil()
 
 	def makeList(self, args):			

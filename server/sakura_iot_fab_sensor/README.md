@@ -26,7 +26,7 @@ Copy directory sakura_iot_fab_sensor under directory /home/YOUR_USER/virtualenv
 ( You do not need to excute this command more than once, if you excuted this at once. ) <br/>
 
 > $ source venv/bin/activate <br/>
-(venv) $ cd  sakura_iot_fab_sensor <br/>
+(venv) $ cd sakura_iot_fab_sensor <br/>
 (venv) $ python setup.py install <br/>
 (venv) $ deactivate <br/>
 

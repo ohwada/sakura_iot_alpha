@@ -14,7 +14,7 @@ import logging
 app = Flask(__name__)
 app.secret_key = 'koh6GaBo' # random characters
 app.config['SESSION_TYPE'] = 'filesystem'
-	
+
 util = SensorUtil()
 
 # global
@@ -27,11 +27,15 @@ g_signature = ''
 # server_run
 def server_run(host, port, basedir):
 	global g_db, g_conf, g_signature
+	debug_file_handler, error_file_handler = util.initLogFileHandler( basedir )
+	app.logger.addHandler( debug_file_handler )
+	app.logger.addHandler( error_file_handler )
+	app.logger.setLevel( logging.DEBUG )
 	g_conf = util.initConfig( basedir )
 	obj = util.readConf( g_conf )
 	if obj:
 		# set param, if the contents of the file is correct 
-		g_db = util.connect( obj["db_name"], obj["db_user"], obj["db_passwd"], obj["db_timeout"] )
+		g_db = util.connect( obj["db_name"], obj["db_user"], obj["db_passwd"], obj["db_timeout"], app.logger )
 		app.config['USERNAME'] = obj["login_username"]
 		app.config['PASSWORD'] = obj["login_password"]
 		# future use
@@ -39,11 +43,7 @@ def server_run(host, port, basedir):
 		if not g_db:
 			# if can not connect db
 			print "check " + g_conf
-	debug_file_handler, error_file_handler = util.initLogFileHandler( basedir )
-	app.logger.addHandler( debug_file_handler )
-	app.logger.addHandler( error_file_handler )
-	app.logger.setLevel( logging.DEBUG )
-	app.run( host=str(host), port=int(port) )
+	app.run( host=str(host), port=int(port), use_reloader=True )
 
 # route index
 @app.route('/', methods=['GET'])
@@ -51,7 +51,7 @@ def route_main():
 	if not g_db:
 		# if db param are not set
 		return render_template('notice.html', conf=g_conf)	
-	main = SensorMain( app, g_db )		
+	main = SensorMain( g_db, app.logger )		
 	param = main.excute( request.args )
 	return render_template('index.html', param=param)
 
@@ -66,7 +66,7 @@ def route_post():
 	if request.method == 'POST':
 		# future use
 		# if request.headers.get("X-Sakura-Signature") == g_signature
-		post = SensorPost( app, g_db )
+		post = SensorPost( g_db, app.logger )
 		post.excute( request.data )		
 	return ""
 
@@ -79,7 +79,7 @@ def route_manage():
 	if not session.get('logged_in'):
 		# if not login
 		return redirect(url_for('route_login'))	
-	manage = SensorManage( g_db )
+	manage = SensorManage( g_db, app.logger )
 	if request.method == 'GET':
 		# get
 		action = request.args.get('action', '')

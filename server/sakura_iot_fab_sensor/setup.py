@@ -5,6 +5,7 @@
 from setuptools import setup, find_packages
 import os
 import sys
+from version import VERSION
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)),"src"))
 import sakura_setuptools
@@ -29,9 +30,9 @@ EXTRA_REQUIRES = dict()
 
 # general setup configuration
 def params():
-    name ="SakuraIotFabSensor"
-    version ="0.2"
-    description ="Sakura IoT Sensor"
+    name = "SakuraIotFabSensor"
+    version = VERSION
+    description = "Sakura IoT Sensor"
 
     install_requires = INSTALL_REQUIRES
     extras_require = EXTRA_REQUIRES
