@@ -47,8 +47,12 @@ def sendmail(from_addr, to_addr, subject, body):
 
 # main
 print "check server"
-response = urllib2.urlopen(URL)
-unix_get = int( response.read() )
+unix_get = 0
+try:
+	response = urllib2.urlopen(URL)
+	unix_get = int( response.read() )
+except:
+	pass
 unix_now = getUnixtimeNow()
 if unix_get < unix_now - 60 or unix_get > unix_now + 60:
 	# if abnormal, restart and send mail
