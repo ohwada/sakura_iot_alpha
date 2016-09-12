@@ -1,7 +1,6 @@
 # SensorUtil
 # 2016-07-01 K.OHWADA
 
-from sensor_db import SensorDb
 from logging.handlers import RotatingFileHandler
 import logging
 import os
@@ -14,26 +13,6 @@ import time
 class SensorUtil():
 
 	TIME_ZONE = 9 # JST (UTC+9)
-
-	def connect(self, name, user, passwd, timeout, logger):
-		db = SensorDb()
-		db.setLogger(logger)
-		# wait for connect
-		# because MySQL is not started
-		# when the power is turned on
-		end = datetime.datetime.now() + datetime.timedelta(seconds=timeout)
-		while(True):
-			ret = db.connect( name, user, passwd )
-			# break, if connected
-			if ret: break
-			time.sleep(1)
-			if datetime.datetime.now() > end:
-				# return, if timeover
-				print "DB error: not connect"
-				return  None
-		# while end
-		db.createTableItemIfNotExist()
-		return db
 
 	def readConf(self, path):        
     		if os.path.exists(path):

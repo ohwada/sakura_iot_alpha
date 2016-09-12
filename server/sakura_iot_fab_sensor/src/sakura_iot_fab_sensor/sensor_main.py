@@ -22,14 +22,28 @@ class SensorMain():
 	DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 	db = None
+	db_param = None
 	logger = None
 	util = None
 
-	def __init__(self, db, logger):
-		self.db = db
+	def __init__(self, db_param, logger):
+		self.db_param = db_param
 		self.logger = logger
 		self.util = SensorUtil()
 
+	def connect(self):
+		self.db = SensorDb()
+		self.db.setLogger( self.logger )
+		ret = self.db.connectParam( self.db_param )
+		if ret:	
+			# create TableItem, if not exist, when connect to DB
+			self.db.createTableItemIfNotExist()
+		return ret
+
+	def close(self):
+		self.db.close()
+
+	# return param		
 	def excute(self, args):
 		range = args.get('r', '')
 		start_in = args.get('s', '')

@@ -8,6 +8,8 @@ import dateutil.parser
 import time
 import sys
 import traceback
+import hmac
+import hashlib
 
 # data format from Sakura IoT Platform
 # {"module": "unfam4F5msY5", "datetime": "2016-07-06T22:13:34.291162188Z", "payload": {"channels": [{"value": 29, "channel": 0, "type": "f"}, {"value": 49, "channel": 1, "type": "f"}, {"value": 1005.4416, "channel": 2, "type": "f"}, {"value": 52.26, "channel": 3, "type": "f"}, {"value": 15.969971, "channel": 4, "type": "f"}]}, "type": "channels"}
@@ -25,21 +27,42 @@ class SensorPost():
 	LF = "\n"
 
 	db = None
+	db_param = None
 	logger = None
 	util = None
+	secret = None
 
-	def __init__(self, db, logger):
-		self.db = db
+	def __init__(self, db_param, logger, secret):
+		self.db_param = db_param
 		self.logger = logger
+		self.secret = secret
 		self.util = SensorUtil()
 
-	def excute(self, data):
+	def excute(self, signature, data):
+		self.db = SensorDb()
+		self.db.setLogger( self.logger )
+		ret = self.db.connectParam( self.db_param )
+		if ret:
+			# connect to DB
+			self.post(signature, data)
+			self.db.close()
+				
+	def post(self, signature, data):
 		try:
+			calc_signature = hmac.new( self.secret.encode("utf-8"), data.encode("utf-8"), hashlib.sha1 ).hexdigest()
+			self.logger.debug( signature )
 			self.logger.debug( data )
 			print data
-			obj = json.loads( data )
-			if obj["type"] == "channels":
-				self.parseChannels( obj )
+			if signature == calc_signature:
+				obj = json.loads( data )
+				if obj["type"] == "channels":
+					self.parseChannels( obj )
+			else:
+				msg = "signature unmatch" + self.LF
+				msg += signature + self.LF
+				msg += calc_signature
+				print msg
+				self.logger.debug( msg )
 		except:
 			self.printExcept()		
 

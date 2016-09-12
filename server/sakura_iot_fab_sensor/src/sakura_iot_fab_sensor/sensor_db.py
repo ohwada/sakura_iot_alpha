@@ -36,7 +36,10 @@ class SensorDb(SensorDbBase):
     		sql += " ) "
     		return self.execute( sql ) 
 
-	def countTableItemTime(self,  start, end):	
+	def countTableItemTimeAll(self):	
+		return self.selectCount( self.TABLE_ITEM, "" )
+
+	def countTableItemTime(self, start, end):	
 		where = self.buildTimeWhere( start, end )
 		return self.selectCount( self.TABLE_ITEM, where )
 

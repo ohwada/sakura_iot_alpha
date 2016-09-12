@@ -12,19 +12,28 @@ class SensorManage():
 	SQL_OFFSET = 0
 	SQL_LIMIT = 50
 	TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-
+		
 	db = None
+	db_param = None
 	logger = None
 	util = None
 
-	def __init__(self, db, logger):
-		self.db = db
+	def __init__(self, db_param, logger):
+		self.db_param = db_param
 		self.logger = logger
 		self.util = SensorUtil()
 
+	def connect(self):
+		self.db = SensorDb()
+		self.db.setLogger( self.logger )
+		return self.db.connectParam( self.db_param )	
+
+	def close(self):
+		self.db.close()
+
 	def makeList(self, args):			
 		return self.getList()
-
+		
 	def makeAddForm(self, args):
 		cols = self.db.makeFormTableItem( 0, 0, 0, 0, 0, 0, 0 )
 		params = { "action":"add", "id":0, "cols":cols }
@@ -87,8 +96,8 @@ class SensorManage():
 
 	def getList(self):
 		rows = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
-		if not rows:
-			print self.db.getError()
+#		if not rows:
+#			print self.db.getError()
 		new_rows = []	
 		for row in rows:
 			row["formated_time"] = self.util.getFormatTime( row["time"], self.TIME_FORMAT )
@@ -97,29 +106,32 @@ class SensorManage():
 
 	def generateData(self):
 		now = self.util.getUnixtimeNow()
-		start = now - 400 * 24 * 60  * 60 # one year ago
-		module = "abc"
-		values = [0, 0, 0, 0, 0]
-		mins = [10,  30, 950, 100, 400]
-		maxs = [30, 80, 1050, 300, 600]
-		divs = [20, 50, 1000, 200, 500]
+#		start = now - 400 * 24 * 60  * 60 # one year ago
+		start = now - 30 * 24 * 60  * 60 # one year ago
+		MODULE = "abc"
+		self.GEN_MINS = [10,  30, 950, 100, 400]
+		self.GEN_MAXS = [30, 80, 1050, 300, 600]
+		self.gen_values = [0, 0, 0, 0, 0]
+		self.gen_divs = [20, 50, 1000, 200, 500]
 		# create data of one minute interval
 		for time in range(start, now, 60):			
-			# make five values
-			for i in range(0, 5):
-				v = values[i]
-				v += divs[i]
-				if v < mins[i]:					
-					# invert div, when smaller
-					v = mins[i]
-					divs[i] = random.uniform(0.05, 1.0)
-				elif v > maxs[i]:
-					# invert div, when bigger
-					v = maxs[i]
-					divs[i] = - random.uniform(0.05, 1.0)
-				values[i] = v
-			# for i end			
-			self.db.insertTableItem( time, module, values[0], values[1], values[2], values[3], values[4] )
+			self.genValues()	
+			self.db.insertTableItem( time, MODULE, self.gen_values[0], self.gen_values[1], self.gen_values[2], self.gen_values[3], self.gen_values[4] )
 		# for time end
 
+	def genValues(self):
+		# make five values
+		for i in range(0, 5):
+			v = self.gen_values[i]
+			v += self.gen_divs[i]
+			if v < self.GEN_MINS[i]:					
+			# invert div, when smaller
+				v = self.GEN_MINS[i]
+				self.gen_divs[i] = random.uniform(0.05, 1.0)
+			elif v > self.GEN_MAXS[i]:
+				# invert div, when bigger
+				v = self.GEN_MAXS[i]
+				self.gen_divs[i] = - random.uniform(0.05, 1.0)
+			self.gen_values[i] = v
+	
 # class end

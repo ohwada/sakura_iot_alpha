@@ -23,10 +23,13 @@ class SensorDbBase():
 	def setLogger(self, logger):
 		self.logger = logger
 
-	def connect(self, db, user, passwd):
+	def connectParam(self, param):
+		return self.connect( param["db_name"], param["user"], param["passwd"] )
+			
+	def connect(self, db_name, user, passwd):
 		ret = False
 		try:
-			self.conn = MySQLdb.connect( host=self.DB_HOST, db=db, user=user, passwd=passwd, charset=self.DB_CHARSET )
+			self.conn = MySQLdb.connect( host=self.DB_HOST, db=db_name, user=user, passwd=passwd, charset=self.DB_CHARSET )
 			ret = True
 		except:
 			self.printExcept()

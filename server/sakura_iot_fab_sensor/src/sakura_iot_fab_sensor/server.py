@@ -7,6 +7,7 @@ from sensor_db import SensorDb
 from sensor_main import SensorMain
 from sensor_post import SensorPost
 from sensor_manage import SensorManage
+from sensor_status import SensorStatus
 from sensor_util import SensorUtil
 import logging
 
@@ -18,15 +19,13 @@ app.config['SESSION_TYPE'] = 'filesystem'
 util = SensorUtil()
 
 # global
-g_db = None
+g_db_param = None
 g_conf = ''
-
-# future use
-g_signature = ''
+g_secret = ''
 
 # server_run
 def server_run(host, port, basedir):
-	global g_db, g_conf, g_signature
+	global g_db_param, g_conf, g_secret
 	debug_file_handler, error_file_handler = util.initLogFileHandler( basedir )
 	app.logger.addHandler( debug_file_handler )
 	app.logger.addHandler( error_file_handler )
@@ -34,67 +33,75 @@ def server_run(host, port, basedir):
 	g_conf = util.initConfig( basedir )
 	obj = util.readConf( g_conf )
 	if obj:
-		# set param, if the contents of the file is correct 
-		g_db = util.connect( obj["db_name"], obj["db_user"], obj["db_passwd"], obj["db_timeout"], app.logger )
+		g_db_param = {}
+		g_db_param["db_name"] = obj["db_name"]
+		g_db_param["user"] = obj["db_user"]
+		g_db_param["passwd"] = obj["db_passwd"]	
 		app.config['USERNAME'] = obj["login_username"]
 		app.config['PASSWORD'] = obj["login_password"]
-		# future use
-		g_signature = obj["sakura_secret"]
-		if not g_db:
-			# if can not connect db
-			print "check " + g_conf
+		g_secret = obj["sakura_secret"]
 	app.run( host=str(host), port=int(port), use_reloader=True )
 
 # route index
 @app.route('/', methods=['GET'])
-def route_main():
-	if not g_db:
-		# if db param are not set
-		return render_template('notice.html', conf=g_conf)	
-	main = SensorMain( g_db, app.logger )		
-	param = main.excute( request.args )
+def route_main():		
+	main = SensorMain( g_db_param, app.logger )
+	ret = main.connect()
+	if not ret:
+		# not connect to DB
+		if session.get('logged_in'):
+			# if login
+			return render_template('notice.html', conf=g_conf)
+		else:
+			# if not login
+			msg = "Cannot connect to Database"
+			param = { "datas":['', '', ''], "datetime":"", "error":msg }
+	else:
+		# connect to DB
+		param = main.excute( request.args )
+		main.close()
 	return render_template('index.html', param=param)
-
+	
 # post
 # header format
 # EnvironHeaders([('Content-Length', u'345'), ('User-Agent', u'python-requests/2.10.0'), ('Connection', u'keep-alive'), ('Host', u'---'), ('Accept', u'*/*'), ('Content-Type', u'application/json'), ('Accept-Encoding', u'gzip, deflate'), ('X-Sakura-Signature', u'---')])
 @app.route('/post', methods=['POST'])
 def route_post():
-	if not g_db:
-		# if db param are not set
-		return ""
 	if request.method == 'POST':
-		# future use
-		# if request.headers.get("X-Sakura-Signature") == g_signature
-		post = SensorPost( g_db, app.logger )
-		post.excute( request.data )		
+		post = SensorPost( g_db_param, app.logger, g_secret )
+		post.excute( request.headers.get("X-Sakura-Signature"), request.data )
 	return ""
 
 # manage
 @app.route('/manage', methods=['POST', 'GET'])
 def route_manage():
-	if not g_db:
-		# if db param are not set
-		return redirect(url_for('route_main'))	
 	if not session.get('logged_in'):
 		# if not login
 		return redirect(url_for('route_login'))	
-	manage = SensorManage( g_db, app.logger )
+	manage = SensorManage( g_db_param, app.logger )
+	ret = manage.connect()
+	if not ret:
+		# not connect to DB
+		return redirect(url_for('route_main'))	
 	if request.method == 'GET':
 		# get
 		action = request.args.get('action', '')
 		print "action " + action
 		if action == "add_form":
 			params = manage.makeAddForm( request.args )
+			manage.close()
 			return render_template( 'manage_add_form.html', params=params )
 		elif action == "edit_form":
 			params = manage.makeEditForm( request.args )
+			manage.close()
 			return render_template( 'manage_edit_form.html', params=params )
 		else:
 			rows = manage.makeList( request.args )
+			manage.close()
 	elif request.method == 'POST':
 		# post
 		rows = manage.post( request.form )			
+		manage.close()
 	return render_template( 'manage_list.html', rows=rows )
 
 # login
@@ -124,6 +131,13 @@ def route_logout():
 	session.pop('logged_in', None)
 	flash('You were logged out')
 	return redirect(url_for('route_main'))
+
+# status
+@app.route('/status')
+def route_status():
+	status = SensorStatus( g_db_param, app.logger )
+	ret = status.excute()
+	return ret
 
 # error 500
 @app.errorhandler(500)
