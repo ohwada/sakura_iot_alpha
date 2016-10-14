@@ -6,16 +6,21 @@ Programs for SAKURA IoT Platform Alpha
   Send data obtained from sensors to Sakura IoT Platform <br/>
 - sakura_iot_serial <br/>
   Connect Arduino monitor to the serial port of Sakura IoT comm board <br/>
+- SakuraAlpha_I2C_with_hdc1000 <br/>
+  https://github.com/sakura-internet/SakuraAlphaArduino/tree/master/examples/SakuraAlpha_I2C_with_hdc1000 <br/>
 
 ### Server
 - python: sakura_iot_fab_sensor <br/>
   Web app display sensor data in graph <br/>
 
 ### WebSocket Client
-- javascript <br/>
+- JavaScript <br/>
   Parse the mesage from SAKURA IoT Platform <br/>
-- python sakura_iot_ws <br/>
+- Python <br/>
   Parse the mesage from SAKURA IoT Platform <br/>
+- Node-RED <br/>
+  Parse the mesage from SAKURA IoT Platform <br/>
+  And display data in line chart <br/>
 
 ### Wiring connection to Arduino
 
