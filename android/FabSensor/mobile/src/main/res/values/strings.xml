@@ -1,0 +1,29 @@
+<resources>
+<!-- 2016-11-01 K.OHWADA -->
+    <string name="app_name">Fab Sensor</string>
+
+<!-- Main Activity -->
+	<string name="title">Fab Sensor - さくら IoT</string>	    
+	<string name="time">Time</string>
+	<string name="temperature">Temperature</string>
+	<string name="humidity">Humidity</string>
+	<string name="pressure">Pressure</string>
+	<string name="light">Light</string>
+	<string name="noise">Noise</string>
+	<string name="refresh">Refresh</string>
+
+<!-- menu main -->
+    <string name="menu_setting">Setting</string>   
+    	
+<!-- preference -->
+    <string name="preference_title_main">Genarl Setting</string>
+    <string name="edittext_pref_url_title">URL of server</string>
+    <string name="edittext_pref_url_summary">Please set the URL of your server</string>
+    
+	<string name="preference_title_debug">Debug Setting</string> 
+    <string name="checkbox_pref_display_event_title">Display event</string>
+    <string name="checkbox_pref_display_event_summary">Display events received from the ware</string>
+    <string name="list_pref_refresh_interval_title">Interval of refresh</string>
+    <string name="list_pref_refresh_interval_summary">Time interval for getting data from the server</string>
+
+</resources>

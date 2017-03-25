@@ -1,5 +1,7 @@
 # SAKURA IoT Platform Alpha
 Programs for SAKURA IoT Platform Alpha
+### Total System
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_android_watch.png" width="500" />
 
 ### Arduino
 - sakura_iot_fab_sensor <br/>
@@ -12,6 +14,9 @@ Programs for SAKURA IoT Platform Alpha
 ### Server
 - python: sakura_iot_fab_sensor <br/>
   Web app display sensor data in graph <br/>
+
+### Android
+  display sensor values on android phone and android watch<br/>
 
 ### WebSocket Client
 - JavaScript <br/>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 2016-11-01 K.OHWADA -->
+<resources>
+<!-- DotsPageIndicator -->
+    <dimen name="dots_spacing">15dp</dimen>  
+</resources>
