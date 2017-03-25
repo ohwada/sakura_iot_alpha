@@ -4,7 +4,7 @@ Programs for SAKURA IoT Platform Alpha
 <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_android_watch.png" width="500" />
 
 ### Arduino
-- sakura_iot_fab_sensor <br/>
+https://github.com/ohwada/sakura_iot_alpha/blob/master/arduino/ <br/>
   Send data obtained from sensors to Sakura IoT Platform <br/>
 - sakura_iot_serial <br/>
   Connect Arduino monitor to the serial port of Sakura IoT comm board <br/>
@@ -12,13 +12,16 @@ Programs for SAKURA IoT Platform Alpha
   https://github.com/sakura-internet/SakuraAlphaArduino/tree/master/examples/SakuraAlpha_I2C_with_hdc1000 <br/>
 
 ### Server
+https://github.com/ohwada/sakura_iot_alpha/blob/master/server/ <br/>
 - python: sakura_iot_fab_sensor <br/>
   Web app display sensor data in graph <br/>
 
 ### Android
+https://github.com/ohwada/sakura_iot_alpha/blob/master/android/ <br/>
   display sensor values on android phone and android watch<br/>
 
 ### WebSocket Client
+https://github.com/ohwada/sakura_iot_alpha/blob/master/ws_client/ <br/>
 - JavaScript <br/>
   Parse the mesage from SAKURA IoT Platform <br/>
 - Python <br/>
