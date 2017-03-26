@@ -2,11 +2,12 @@
 # flask main
 # 2016-07-01 K.OHWADA
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort, jsonify
 from sensor_db import SensorDb
 from sensor_main import SensorMain
 from sensor_post import SensorPost
 from sensor_manage import SensorManage
+from sensor_api import SensorApi
 from sensor_status import SensorStatus
 from sensor_util import SensorUtil
 import logging
@@ -43,11 +44,11 @@ def server_run(host, port, basedir):
 	app.run( host=str(host), port=int(port), use_reloader=True )
 
 # route index
-@app.route('/', methods=['GET'])
+@app.route('/')
 def route_main():		
 	main = SensorMain( g_db_param, app.logger )
-	ret = main.connect()
-	if not ret:
+	conn = main.connect()
+	if not conn:
 		# not connect to DB
 		if session.get('logged_in'):
 			# if login
@@ -73,14 +74,14 @@ def route_post():
 	return ""
 
 # manage
-@app.route('/manage', methods=['POST', 'GET'])
+@app.route('/manage', methods=['GET', 'POST'])
 def route_manage():
 	if not session.get('logged_in'):
 		# if not login
 		return redirect(url_for('route_login'))	
 	manage = SensorManage( g_db_param, app.logger )
-	ret = manage.connect()
-	if not ret:
+	conn = manage.connect()
+	if not conn:
 		# not connect to DB
 		return redirect(url_for('route_main'))	
 	if request.method == 'GET':
@@ -132,12 +133,19 @@ def route_logout():
 	flash('You were logged out')
 	return redirect(url_for('route_main'))
 
+# api
+@app.route('/api')
+def route_api():
+	api = SensorApi( g_db_param, app.logger )
+	res = api.excute(None)
+	return jsonify(res)
+
 # status
 @app.route('/status')
 def route_status():
 	status = SensorStatus( g_db_param, app.logger )
-	ret = status.excute()
-	return ret
+	res = status.excute()
+	return res
 
 # error 500
 @app.errorhandler(500)

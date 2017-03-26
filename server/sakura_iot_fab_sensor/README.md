@@ -47,6 +47,13 @@ or service daemon <br/>
 Access using web browser. <br/>
 http://YOUR_SERVER_URL:5050/ <br/>
 <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/graph_whole.png" width="300" />
-
+- route none <br/>
+display sensor data in graph <br/>
+- route api <br/>
+return one day sensor data <br/>
+- route post <br/>
+save sensor data to database<br/>
+- route status <br/>
+return unixtime when server status is green
 ### Blog (Japanese)
 http://android.ohwada.jp/archives/7077

@@ -1,3 +1,3 @@
 # version
-# 2016-09-01 K.OHWADA
-VERSION ="0.5"
+# 2016-11-22 K.OHWADA
+VERSION ="0.6"
