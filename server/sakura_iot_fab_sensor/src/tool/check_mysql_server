@@ -1,0 +1,5 @@
+#!/bin/sh
+# 2017-11-01
+# check_mysql_server
+# run in /etc/cron.hourly
+/usr/bin/python /root/bin/check_mysql_server.py
