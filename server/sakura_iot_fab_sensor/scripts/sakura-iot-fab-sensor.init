@@ -56,6 +56,17 @@ is_alive()
    return $?
 }
 
+# kill all children process
+killpstree(){
+	local children=`ps --ppid $1 --no-heading | awk '{ print $1 }'`
+	for child in $children
+	do
+		killpstree $child 
+	done
+#    echo "kill $1"
+	kill $1 
+}
+
 #
 # Function that starts the daemon/service
 #
@@ -88,10 +99,12 @@ do_stop()
    #   2 if daemon could not be stopped
    #   other if a failure occurred
 
-   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $SAKURA_USER --pidfile $PIDFILE
-   RETVAL="$?"
-   [ "$RETVAL" = "2" ] && return 2
+#   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $SAKURA_USER --pidfile $PIDFILE
+#   RETVAL="$?"
+#   [ "$RETVAL" = "2" ] && return 2
 
+    pid=`cat $PIDFILE` > /dev/null 2>&1
+    killpstree $pid > /dev/null 2>&1 
    rm -f $PIDFILE
 
    [ "$RETVAL" = "0"  ] && return 0 || return 1
