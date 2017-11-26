@@ -15,7 +15,12 @@ https://github.com/ohwada/sakura_iot_alpha/blob/master/arduino/ <br/>
 https://github.com/ohwada/sakura_iot_alpha/blob/master/server/ <br/>
 - python: sakura_iot_fab_sensor <br/>
   Web app display sensor data in graph <br/>
-
+  g src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/graph_temperature.png" width="300" />
+  
+### Viewer
+https://github.com/ohwada/sakura_iot_alpha/blob/master/viewer/ <br/>
+  display sensor values in line chart with python and android <br/>
+  
 ### Android
 https://github.com/ohwada/sakura_iot_alpha/blob/master/android/ <br/>
   display sensor values on android phone and android watch<br/>
