@@ -1,7 +1,7 @@
 # SAKURA IoT Platform Alpha
 Programs for SAKURA IoT Platform Alpha
 ### Total System
-<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_android_watch.png" width="500" />
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_system.png" width="500" />
 
 ### Arduino
 https://github.com/ohwada/sakura_iot_alpha/blob/master/arduino/ <br/>
@@ -18,9 +18,10 @@ https://github.com/ohwada/sakura_iot_alpha/blob/master/server/ <br/>
   <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/graph_temperature.png" width="300" />
   
 ### Viewer
+display sensor values in line chart on pc and android <br/>
 https://github.com/ohwada/sakura_iot_alpha/blob/master/viewer/ <br/>
-  display sensor values in line chart with python and android <br/>
-  
+  <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_viewer.png" width="500" /> <br/>
+    
 ### Android
 https://github.com/ohwada/sakura_iot_alpha/blob/master/android/ <br/>
   display sensor values on android phone and android watch<br/>
