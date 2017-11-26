@@ -12,6 +12,8 @@ Programs for SAKURA IoT Platform Alpha
   
   - android <br/>
 FabSensorLineChart<br/>
+  <img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/viewer/android/FabSensorLineChart/screenshot/screenshot_line_chart.png" width="300" />
+
 
 ### Blog (Japanese)
 - http://android.ohwada.jp/
