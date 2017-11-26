@@ -8,6 +8,8 @@ Programs for SAKURA IoT Platform Alpha
   display sensor values in line chart with python and android <br/>
   - python <br/>
   fab_sensor_line_chart.py <br/>
+  <img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/viewer/python/python_fab_sensor_line_chart.png" width="300" />
+  
   - android <br/>
 FabSensorLineChart<br/>
 

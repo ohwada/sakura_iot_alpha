@@ -7,7 +7,9 @@ Programs for SAKURA IoT Platform Alpha
 ###   fab_sensor_line_chart.py<br/>
 display Temperature on line chart<br/>
 get data from the server<br/>
-<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/viewer/python/.png" width="300" />
+
+### scrrenshot <br/>
+<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/viewer/python/python_fab_sensor_line_chart.png" width="300" />
 
 ### Blog (Japanese)
 - http://android.ohwada.jp/
