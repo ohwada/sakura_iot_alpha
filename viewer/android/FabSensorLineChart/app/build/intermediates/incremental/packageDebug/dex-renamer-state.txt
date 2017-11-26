@@ -1,0 +1,7 @@
+#Sun Nov 26 12:34:44 JST 2017
+base.0=/Users/ohwada/AndroidStudioProjects/FabSensorLineChart/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2467010cb3fcb730d312ee9b2bcb5cb01808d1f4
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/Users/ohwada/AndroidStudioProjects/FabSensorLineChart/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8f282951dd6988f08f94ccf1091e3d67d127c2a3/classes.dex
+base.1=/Users/ohwada/AndroidStudioProjects/FabSensorLineChart/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8f282951dd6988f08f94ccf1091e3d67d127c2a3
+file.0=/Users/ohwada/AndroidStudioProjects/FabSensorLineChart/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2467010cb3fcb730d312ee9b2bcb5cb01808d1f4/classes.dex
