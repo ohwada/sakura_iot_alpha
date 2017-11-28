@@ -19,4 +19,4 @@ display Temperature on line chart<br/>
 - https://matplotlib.org/ <br/>
 
 ### Blog (Japanese)
-- http://android.ohwada.jp/
+http://android.ohwada.jp/archives/7561
