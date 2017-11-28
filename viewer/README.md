@@ -19,3 +19,4 @@ FabSensorLineChart<br/>
 
 ### Blog (Japanese)
 http://android.ohwada.jp/archives/7561
+http://android.ohwada.jp/archives/7565

@@ -28,4 +28,4 @@ menu <br/>
 - https://android.googlesource.com/platform/frameworks/volley <br/>
 
 ### Blog (Japanese)
-- http://android.ohwada.jp/
+http://android.ohwada.jp/archives/7565
