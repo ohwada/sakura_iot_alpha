@@ -24,7 +24,7 @@ period: specify the period with
 <date time of start> and <date time of end> <br/>
 date time is a string like yyyy - MM - dd hh: mm <br/>
 
-<img src="http://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_main.png" width="300"/> <br/>
+<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_main.png" width="300"/> <br/>
 
 ### (2)  "/api" <br/>
 return The sensor data of the most recent one day  in the json format <br/>
@@ -47,6 +47,7 @@ If it is normal, return the unix time of the current time <br/>
 at GET method, display a form of a user name and a password for login. <br/>
 at POST method, if the user name and the password value match the value of the setting file, set the login state  <br/>
 
+<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_login.png" width="300"/> <br/>
 
 ### (6) '/logout' <br/>
 
@@ -59,6 +60,8 @@ manage  the sensor data in the database. <br/>
 If not in the login state, move login <br/>
 at GET method, display a form for add new , update and delete. <br/>
 at POST method, performe to add new, update, and delete <br/>
+
+<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_manege.png" width="300"/> <br/>
 
 ## Manage of web server <br/>
 monitor life-and-death of server <br/>
