@@ -12,16 +12,18 @@ Read data from the database, and display in [Google Chart]
 
 <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_system.png" width="500" />
 
-### Requirements
+### Requirements <br/>
 - OS: Linux <br/>
 - Python 2.7 <br/>
 - [python-dev](https://packages.debian.org/jessie/python-dev) <br/>
 - [Virtualenv](https://virtualenv.readthedocs.org/en/latest/) <br/>
 
 ### Install
-Copy directory sakura_iot_fab_sensor under directory /home/YOUR_USER/virtualenv
+$ cd ~<br>
+$ mkdir virtualenv<br>
+Copy directory sakura_iot_fab_sensor under directory /home/YOUR_USER/virtualenv <br/>
 
-> cd ~/virtualenv
+> cd ~/virtualenv <br/>
 > $ virtualenv venv <br/>
 ( You do not need to excute this command more than once, if you excuted this at once. ) <br/>
 
@@ -30,17 +32,23 @@ Copy directory sakura_iot_fab_sensor under directory /home/YOUR_USER/virtualenv
 (venv) $ python setup.py install <br/>
 (venv) $ deactivate <br/>
 
-you can use service daemon <br/>
+you can use service daemon for Debian <br/>
 > $ sudo sh init.sh <br/>
+edit script file  <br>
+$ vi /etc/default/sakura-iot-fab-sensor <br>
 
-### Run
-> $ cd ~<br/>
-$ sudo virtualenv/venv/bin/sakura_iot_fab_sensor <br/>
+run at once <br>
+$ cd ~/virtualenv/sakura_iot_fab_sensor<br>
+$ run python run.py <br>
 
-or service daemon <br/>
+edit setting file  <br>
+$ cd ~/.sakura_iot_fab_sensor/conf<br>
+$ vi user.conf <br>
+
+### run service daemon <br>
 > $ sudo /etc/init.d/sakura-iot-fab-sensor start <br/>
 
-### Quite service daemon
+### quite service daemon <br>
 > $ sudo insserv -r sakura-iot-fab-sensor
 
 ### Usage
@@ -55,5 +63,6 @@ return one day sensor data <br/>
 save sensor data to database<br/>
 - route status <br/>
 return unixtime when server status is green
+
 ### Blog (Japanese)
 http://android.ohwada.jp/archives/7077

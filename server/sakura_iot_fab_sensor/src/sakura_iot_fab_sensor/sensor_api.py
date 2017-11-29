@@ -1,6 +1,12 @@
 # SensorApi
 # 2016-09-01 K.OHWDA
 
+""" API
+
+return The sensor data of the most recent one day  in the json format
+
+"""
+
 from sensor_db import SensorDb
 from sensor_util import SensorUtil
 

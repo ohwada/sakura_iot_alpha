@@ -1,6 +1,14 @@
 # SensorStatus
 # 2016-09-01 K.OHWDA
 
+""" status
+
+return the status of the server.
+It is used to monitor the server's life and death.
+If it is normal, return the unix time of the current time
+
+"""
+
 from sensor_db import SensorDb
 from sensor_util import SensorUtil
 

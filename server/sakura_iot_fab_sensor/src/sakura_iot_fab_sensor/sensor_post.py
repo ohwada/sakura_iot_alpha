@@ -1,6 +1,25 @@
 # SensorPost
 # 2016-07-01 K.OHWDA
 
+""" post
+
+at POST method, store sensor data  in the database.
+It corresponds to outgoing of Sakura Iot Platform.
+Check the validity by X - Sakura - Signature of the header part.
+Sensor data is in json format
+
+data format from Sakura IoT Platform
+ {"module": "unfam4F5msY5", "datetime": "2016-07-06T22:13:34.291162188Z", "payload": {"channels": [{"value": 29, "channel": 0, "type": "f"}, {"value": 49, "channel": 1, "type": "f"}, {"value": 1005.4416, "channel": 2, "type": "f"}, {"value": 52.26, "channel": 3, "type": "f"}, {"value": 15.969971, "channel": 4, "type": "f"}]}, "type": "channels"}
+
+channel assignment
+ ch0: temperature
+ ch1: humidity
+ ch2: pressure
+ ch3: light
+ ch4: noise
+ 
+"""
+
 from sensor_db import SensorDb
 from sensor_util import SensorUtil
 import json
@@ -10,16 +29,6 @@ import sys
 import traceback
 import hmac
 import hashlib
-
-# data format from Sakura IoT Platform
-# {"module": "unfam4F5msY5", "datetime": "2016-07-06T22:13:34.291162188Z", "payload": {"channels": [{"value": 29, "channel": 0, "type": "f"}, {"value": 49, "channel": 1, "type": "f"}, {"value": 1005.4416, "channel": 2, "type": "f"}, {"value": 52.26, "channel": 3, "type": "f"}, {"value": 15.969971, "channel": 4, "type": "f"}]}, "type": "channels"}
-
-# channel assignment
-# ch0: temperature
-# ch1: humidity
-# ch2: pressure
-# ch3: light
-# ch4: noise
 
 # SensorPost
 class SensorPost():

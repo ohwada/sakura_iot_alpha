@@ -1,6 +1,14 @@
 # SensorManage
 # 2016-07-01 K.OHWDA
 
+""" manage
+manage  the sensor data in the database.
+If not in the login state, move login
+at GET method, display a form for add new , update and delete.
+at POST method, performe to add new, update, and delete
+
+"""
+
 from sensor_db import SensorDb
 from sensor_util import SensorUtil
 import random

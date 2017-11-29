@@ -1,6 +1,24 @@
 # SensorMain
 # 2016-07-01 K.OHWDA
 
+""" main
+
+return The sensor data  to display in line chart
+
+specify the range of time of the data to be displayed with parameters.
+
+? r = <renge type> & s = <date time of start> & e = <date time of end>
+
+<renge type>
+day: Last 1 day (when parameter is omitted)
+week: Last week
+month: Last January
+year: Last 1 year
+period: specify the period with 
+<date time of start> and <date time of end>
+date time is a string like yyyy - MM - dd hh: mm
+"""
+
 from sensor_db import SensorDb
 from sensor_util import SensorUtil
 
