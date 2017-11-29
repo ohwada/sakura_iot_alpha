@@ -13,7 +13,7 @@ display sensor data in line chart <br/>
 
 specify the range of time of the data to be displayed with parameters. <br/>
 
-? r = <renge type> & s = <date time of start> & e = <date time of end> <br/>
+? r = &lt;renge type&gt; & s = &lt;date time of start&lt &amp; e = &lt;date time of end&lt; <br/>
 
 <renge type>
 day: Last one day (when parameter is omitted) <br/>
@@ -61,7 +61,7 @@ If not in the login state, move login <br/>
 at GET method, display a form for add new , update and delete. <br/>
 at POST method, performe to add new, update, and delete <br/>
 
-<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_manege.png" width="300"/> <br/>
+<img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_manage.png" width="300"/> <br/>
 
 ## Manage of web server <br/>
 monitor life-and-death of server <br/>
