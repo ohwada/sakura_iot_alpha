@@ -13,7 +13,7 @@ display sensor data in line chart <br/>
 
 specify the range of time of the data to be displayed with parameters. <br/>
 
-? r = &lt;renge type&gt; & s = &lt;date time of start&lt &amp; e = &lt;date time of end&lt; <br/>
+? r = &lt;renge type&gt; & s = &lt;date time of start&gt; &amp; e = &lt;date time of end&gt; <br/>
 
 <renge type>
 day: Last one day (when parameter is omitted) <br/>
@@ -21,7 +21,7 @@ week: Last one week <br/>
 month: Last one month <br/>
 year: Last one year <br/>
 period: specify the period with 
-<date time of start> and <date time of end> <br/>
+date time of start and date time of end <br/>
 date time is a string like yyyy - MM - dd hh: mm <br/>
 
 <img src="https://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_main.png" width="300"/> <br/>
