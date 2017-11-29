@@ -1,67 +1,68 @@
 # Specification of Sakura IoT Fab Sensor Server
 
-### Overview
+### Overview <br/>
 a web server written with python flask.
 store sensor data  in databese
 sensor data are collected via Sakura IoT
 
-## function of Web Server
+## function of Web Server <br/>
 different processing depending on the path of url to access
 
 ### (1)  "/"　
-display sensor data in line chart
+display sensor data in line chart <br/>
 
-specify the range of time of the data to be displayed with parameters.
+specify the range of time of the data to be displayed with parameters. <br/>
 
-? r = <renge type> & s = <date time of start> & e = <date time of end>
+? r = <renge type> & s = <date time of start> & e = <date time of end> <br/>
 
 <renge type>
-day: Last 1 day (when parameter is omitted)
-week: Last week
-month: Last January
-year: Last 1 year
+day: Last one day (when parameter is omitted) <br/>
+week: Last one week <br/>
+month: Last one month <br/>
+year: Last one year <br/>
 period: specify the period with 
-<date time of start> and <date time of end>
-date time is a string like yyyy - MM - dd hh: mm
+<date time of start> and <date time of end> <br/>
+date time is a string like yyyy - MM - dd hh: mm <br/>
 
-### (2)  "/api"
+<img src="http://raw.githubusercontent.com/ohwada/sakura_iot_alpha/master/server/docs/sakura_iot_fab_sensor_main.png" width="300"/> <br/>
 
-return The sensor data of the most recent one day  in the json format
+### (2)  "/api" <br/>
+return The sensor data of the most recent one day  in the json format <br/>
 
-### (3)  "/post”
+### (3)  "/post” <br/>
 
-at POST method, store sensor data  in the database.
-It corresponds to outgoing of Sakura IoT Platform.
-Check the validity by X - Sakura - Signature of the header part.
-Sensor data is in json format
+at POST method, store sensor data  in the database. <br/>
+corresponds to outgoing of Sakura IoT Platform. <br/>
+Check the validity by X - Sakura - Signature of the header part. <br/>
+Sensor data is in json format <br/>
 
-### (4)'/status'
-return the status of the server.
-for monitoring life-and-death of server
-If it is normal, return the unix time of the current time
+### (4)'/status' <br/>
+return the status of the server. <br/>
+for monitoring life-and-death of server <br/>
+If it is normal, return the unix time of the current time <br/>
 
-### (5) '/login'
+### (5) '/login' <br/>
 
- login processing
-at GET method, display a form of a user name and a password for login.
-at POST method, if the user name and the password value match the value of the setting file, the login state is set
+ login processing <br/>
+at GET method, display a form of a user name and a password for login. <br/>
+at POST method, if the user name and the password value match the value of the setting file, set the login state  <br/>
 
 
-### (6) '/logout'
+### (6) '/logout' <br/>
 
- logout processing
-at POST method, cancel login state
+ logout processing <br/>
+at POST method, cancel login state <br/>
 
-### (7) ”/manage”
+### (7) ”/manage” <br/>
 
-manage  the sensor data in the database.
-If not in the login state, move login
-at GET method, display a form for add new , update and delete.
-at POST method, performe add new, update, and delete
+manage  the sensor data in the database. <br/>
+If not in the login state, move login <br/>
+at GET method, display a form for add new , update and delete. <br/>
+at POST method, performe to add new, update, and delete <br/>
 
-## Manage of web server
-monitor life-and-death of server
-if  abnormal, restart server.
+## Manage of web server <br/>
+monitor life-and-death of server <br/>
+if  abnormal, restart server. <br/>
 
 
 
