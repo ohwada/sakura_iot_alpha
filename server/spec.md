@@ -1,9 +1,13 @@
 # Specification of Sakura IoT Fab Sensor Server
 
 ### Overview <br/>
-a web server written with python flask.
-store sensor data  in databese
-sensor data are collected via Sakura IoT
+Web app display sensor data in line chart<br/>
+Receive data from Sakura IoT Platform. <br/>
+Store data in MySQL database. <br/> 
+Read data from the database, and display in [Google Chart]
+(https://developers.google.com/chart/interactive/docs/gallery/linechart). <br/>
+
+<img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_system.png" width="500" />
 
 ## function of Web Server <br/>
 different processing depending on the path of url to access
@@ -28,6 +32,31 @@ date time is a string like yyyy - MM - dd hh: mm <br/>
 
 ### (2)  "/api" <br/>
 return The sensor data of the most recent one day  in the json format <br/>
+
+Example of sensor data to be returned <br/>
+------------------------ <br/>
+{ <br/>
+  "items": [ <br/>
+    { <br/>
+      "humidity": 68.3828,  <br/>
+      "light": 268.119,  <br/>
+      "noise": 484.355,  <br/>
+      "pressure": 1004.64,  <br/>
+      "temperature": 13.9922,  <br/>
+      "time": 1473513363 <br/>
+    },  <br/>
+        { <br/>
+      "humidity": 73.181,  <br/>
+      "light": 125.202,  <br/>
+      "noise": 465.984,  <br/>
+      "pressure": 978.914,  <br/>
+      "temperature": 21.5058,  <br/>
+      "time": 1473599703 <br/>
+    } <br/>
+  ],  <br/>
+  "num": 1440 <br/>
+} <br/>
+  --------------- <br/>
 
 ### (3)  "/post” <br/>
 

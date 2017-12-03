@@ -16,7 +16,7 @@ import random
 # SensorManage
 class SensorManage():
 	SQL_WHERE = ""	
-	SQL_ORDER = "DESC"
+	SQL_ORDER = "id DESC"
 	SQL_OFFSET = 0
 	SQL_LIMIT = 50
 	TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -26,27 +26,38 @@ class SensorManage():
 	logger = None
 	util = None
 
+# init
 	def __init__(self, db_param, logger):
 		self.db_param = db_param
 		self.logger = logger
 		self.util = SensorUtil()
+# ---
 
+# connect
 	def connect(self):
 		self.db = SensorDb()
 		self.db.setLogger( self.logger )
 		return self.db.connectParam( self.db_param )	
+# ---
 
+# close
 	def close(self):
 		self.db.close()
+# ---
 
+# makeList
 	def makeList(self, args):			
 		return self.getList()
-		
+# ---
+
+#	makeAddForm	
 	def makeAddForm(self, args):
 		cols = self.db.makeFormTableItem( 0, 0, 0, 0, 0, 0, 0 )
 		params = { "action":"add", "id":0, "cols":cols }
 		return params
+# ---
 
+# makeEditForm
 	def makeEditForm(self, args):
 		id = args.get('id', '0')
 		if id <= 0:
@@ -64,7 +75,9 @@ class SensorManage():
 			row["time"], row["module"], row["temperature"], row["humidity"], row["pressure"], row["light"], row["noise"] )
 		params = { "action":"edit", "id":id, "cols":cols }
 		return params
+# ---
 
+# post
 	def post(self, form):
 		action = str(form['action'])
 		print "action " + action
@@ -80,7 +93,9 @@ class SensorManage():
 		elif action == "gen_data":
 			self.generateData()
 		return self.getList()
+# ---
 
+# addRecord
 	def addRecord(self, form):
 		time = int(form['time'])
 		module = str(form['module'])
@@ -90,7 +105,9 @@ class SensorManage():
 		light = float(form['light'])
 		noise = float(form['noise'])
 		self.db.insertTableItem( time, module, temp, humi, pressure, light, noise )
+# ---
 
+# editRecord
 	def editRecord(self, form):
 		id = int(form['id'])
 		time = int(form['time'])
@@ -101,17 +118,25 @@ class SensorManage():
 		light = float(form['light'])
 		noise = float(form['noise'])
 		self.db.updateTableItem( id, time, module, temp, humi, pressure, light, noise )
+# ---
 
+# getList
 	def getList(self):
 		rows = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
-#		if not rows:
-#			print self.db.getError()
 		new_rows = []	
-		for row in rows:
-			row["formated_time"] = self.util.getFormatTime( row["time"], self.TIME_FORMAT )
-			new_rows.append(row)	
+		if not rows:
+#			print self.db.getError()
+			print "can not get record"
+		else:	
+			length = len(rows)
+			for i in range(length):
+				row = rows[i]
+				row["formated_time"] = self.util.getFormatTime( row["time"], self.TIME_FORMAT )
+				new_rows.append(row)	
 		return new_rows
+# ---
 
+# generateData for test
 	def generateData(self):
 		now = self.util.getUnixtimeNow()
 #		start = now - 400 * 24 * 60  * 60 # one year ago
@@ -126,7 +151,9 @@ class SensorManage():
 			self.genValues()	
 			self.db.insertTableItem( time, MODULE, self.gen_values[0], self.gen_values[1], self.gen_values[2], self.gen_values[3], self.gen_values[4] )
 		# for time end
+# ---
 
+# genValues
 	def genValues(self):
 		# make five values
 		for i in range(0, 5):
@@ -141,5 +168,6 @@ class SensorManage():
 				v = self.GEN_MAXS[i]
 				self.gen_divs[i] = - random.uniform(0.05, 1.0)
 			self.gen_values[i] = v
+# ---
 	
 # class end

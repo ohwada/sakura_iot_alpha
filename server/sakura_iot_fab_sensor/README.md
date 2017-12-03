@@ -1,8 +1,7 @@
 # Server - SAKURA IoT Platform Alpha
 
 ## sakura_iot_fab_sensor
-Web app display sensor data in graph <br/>
-
+Web app display sensor data in line chart<br/>
 Receive data from Sakura IoT Platform. <br/>
 Store data in MySQL database. <br/> 
 Read data from the database, and display in [Google Chart]
@@ -13,7 +12,8 @@ Read data from the database, and display in [Google Chart]
 <img src="https://github.com/ohwada/sakura_iot_alpha/blob/master/docs/sakura_iot_fab_sensor_system.png" width="500" />
 
 ### Requirements <br/>
-- OS: Linux <br/>
+- OS: Linux ( recommend Debian ) <br/>
+- MySQL<br/>
 - Python 2.7 <br/>
 - [python-dev](https://packages.debian.org/jessie/python-dev) <br/>
 - [Virtualenv](https://virtualenv.readthedocs.org/en/latest/) <br/>
@@ -38,6 +38,8 @@ edit script file  <br>
 $ vi /etc/default/sakura-iot-fab-sensor <br>
 
 run at once <br>
+ pip install --upgrade MySQL-python
+$ pip install --upgrade flask
 $ cd ~/virtualenv/sakura_iot_fab_sensor<br>
 $ run python run.py <br>
 
@@ -60,7 +62,7 @@ display sensor data in graph <br/>
 - route api <br/>
 return one day sensor data <br/>
 - route post <br/>
-save sensor data to database<br/>
+store sensor data to database<br/>
 - route status <br/>
 return unixtime when server status is green
 

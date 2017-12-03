@@ -20,12 +20,17 @@ class SensorDbBase():
 	logger = None
 	conn = None
 
+# setLogger
 	def setLogger(self, logger):
 		self.logger = logger
+# ---
 
+# onnectParam
 	def connectParam(self, param):
 		return self.connect( param["db_name"], param["user"], param["passwd"] )
-			
+# ---
+
+# 	connect		
 	def connect(self, db_name, user, passwd):
 		ret = False
 		try:
@@ -34,7 +39,9 @@ class SensorDbBase():
 		except:
 			self.printExcept()
 		return ret
+# ---
 
+# close
 	def close(self):
 		self.conn.close()
 		self.conn = None
@@ -45,7 +52,9 @@ class SensorDbBase():
 		for table in tables:
 			if table == name: return True
 		return False	
+# ---
 
+#  showTables
 	def showTables(self):
 		sql = "SHOW TABLES"
 		result = self.getResultList( sql )
@@ -54,39 +63,54 @@ class SensorDbBase():
 		for row in result:
     			rows.append( row[0] )
 		return rows
+# ---
 
+# truncateTable
 	def truncateTable(self, table):
 		sql = "TRUNCATE " + table
 		return self.execute(sql)
+# ---
 
+# selectCount
 	def selectCount(self, table, where):
 		sql = "SELECT count(*) FROM " + table + " " + where
 		return self.getResultCount( sql )
+# ---
 
+# selectOneById
 	def selectOneById(self, table, id):
 		rows = self.selectById(table, id)
 		if not rows:
 			return None
 		return rows[0]
+# ---
 
+# selectById
 	def selectById(self, table, id):
 		sql = "SELECT * FROM " + table + " WHERE id=" + str(int(id))
 		return self.getResultDict( sql )
+# ---
 
+# electAll
 	def selectAll(self, table, where, order, limit, offset):
-		sql = "SELECT * FROM " + table + " " + where + " ORDER BY id " + order
+#		sql = "SELECT * FROM " + table + " " + where + " ORDER BY id " + order
+		sql = "SELECT * FROM " + table + " " + where + " ORDER BY " + order
 		if limit > 0:
 			sql += " LIMIT " + str(int(limit))
 			if offset > 0:
 				sql += " OFFSET " + str(int(offset))
 		return self.getResultDict( sql )
+# ---
 
+# selectOne
 	def selectOne(self, table, where, order):
 		rows = self.selectAll( table, where, order, self.LIMIT_ONE, self.OFFSET_ZERO )
 		if not rows:
 			return None
 		return rows[0]
+# ---
 
+#  insert
 	def insert(self, table, params):
 		ret = False
 		if params is None: return ret
@@ -104,7 +128,9 @@ class SensorDbBase():
 		except:
 			self.printExcept()		
 		return ret
+# ---
 
+# update
 	def update(self, table, id, params):
 		ret = False
 		if params is None: return ret
@@ -118,15 +144,21 @@ class SensorDbBase():
 		except:
 			self.printExcept()		
 		return ret
+# ---
 
+# delete
 	def delete(self, table, id):
 		sql = "DELETE FROM " + table + " WHERE id=" + str(int(id))
 		return self.execute( sql )
+# ---
 
+# escape
 	def escape(self, v):
 		text = "'" + MySQLdb.escape_string( str(v) ) + "'"
 		return text
+# ---
 
+# execute
 	def execute(self, sql):
 		ret = False
 		try:
@@ -138,7 +170,9 @@ class SensorDbBase():
 		except:
 			self.printExcept()
 		return ret
+# ---
 
+# getResultCount
 	def getResultCount(self, sql):
 		ret = None
 		try:
@@ -150,7 +184,9 @@ class SensorDbBase():
 		except:
 			self.printExcept()
 		return ret
-		
+# ---
+
+# 	getResultList	
 	def getResultList(self, sql):
 		result = None
 		try:
@@ -161,8 +197,11 @@ class SensorDbBase():
 		except:
 			self.printExcept()
 		return result
+# ---
 
+# getResultDict
 	def getResultDict(self, sql):
+		# print sql
 		result = None
 		try:
 			cursor = self.conn.cursor( MySQLdb.cursors.DictCursor )
@@ -172,19 +211,25 @@ class SensorDbBase():
 		except:
 			self.printExcept()
 		return result
+# ---
 
+# printResultList
 	def printResultList(self, result):
 		for row in result:
 			for i in range(0, len(row)):
 				print row[i] + ", ",
 			print ""
+# ---
 
+# printResultDict
 	def printResultDict(self, result):
 		for row in result:
 			for k, v in row.items():
 				print str(k) + ":" + str(v) + ", ",
 			print ""
+# ---
 
+# printExcept
 	def printExcept(self):
 		info = sys.exc_info()
 		msg = "DB Error:" + self.LF
@@ -196,5 +241,6 @@ class SensorDbBase():
 		if self.logger:
 			self.logger.error(msg)
 		print msg
+# ---
 		            			
 # class end

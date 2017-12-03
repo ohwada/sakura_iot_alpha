@@ -34,7 +34,8 @@ class SensorMain():
 	SEC_MONTH = 30 * SEC_DAY # one month	
 	SEC_YEAR = 365 * SEC_DAY	# one year
 	SQL_WHERE = ""	
-	SQL_ORDER = "DESC"
+	SQL_ORDER = "id DESC"
+
 	SQL_OFFSET = 0 # no offset
 	SQL_LIMIT = 24 * 60  # the number of data per day
 	DATE_FORMAT = "%Y-%m-%d %H:%M"
@@ -44,11 +45,14 @@ class SensorMain():
 	logger = None
 	util = None
 
+# init
 	def __init__(self, db_param, logger):
 		self.db_param = db_param
 		self.logger = logger
 		self.util = SensorUtil()
+# ---
 
+# connect
 	def connect(self):
 		self.db = SensorDb()
 		self.db.setLogger( self.logger )
@@ -57,11 +61,15 @@ class SensorMain():
 			# create TableItem, if not exist, when connect to DB
 			self.db.createTableItemIfNotExist()
 		return ret
+# ---
 
+# close
 	def close(self):
 		self.db.close()
+# ---
 
-	# return param		
+# excute
+# return param		
 	def excute(self, args):
 		range = args.get('r', '')
 		start_in = args.get('s', '')
@@ -72,7 +80,8 @@ class SensorMain():
 		count, rows = self.getRecordsTimeRange( range, start_in, end_in )
 		if (count is None) or (rows is None):
 			# error
-			error = self.db.getError()
+			# error = self.db.getError()
+			error = "can not get record"
 			print error
 			self.logger.error( error )	
 			msg = "No Data"		
@@ -85,7 +94,10 @@ class SensorMain():
 			datas = self.makeChartData( rows )
 		param = { "datas":datas, "datetime":dt, "error":msg }
 		return param
+# ---
 
+
+# getRecordsTimeRange
 	# @return dict
 	def getRecordsTimeRange(self, range, start_in, end_in ):
 		start, end = self.calcPeriodTime( range, start_in, end_in )
@@ -95,7 +107,10 @@ class SensorMain():
 		elif count == 0:
 			# read the latest data, if no data in the time range
 			rows0 = self.db.readAllTableItem( self.SQL_WHERE, self.SQL_ORDER, self.SQL_LIMIT, self.SQL_OFFSET )
-			return [len(rows0), rows0]
+			cnt0 = 0
+			if rows0:
+				cnt0 = len(rows0)
+			return [cnt0, rows0]
 		elif count <= self.SQL_LIMIT:
 			# reads the data, If within the limit
 			rows1 = self.db.readTableItemTime( start, end, self.SQL_LIMIT )		
@@ -104,7 +119,9 @@ class SensorMain():
 		skip2 = int( count / self.SQL_LIMIT )
 		rows2 = self.db.readTableItemTimeSkip( start, end, skip2, 2 * self.SQL_LIMIT )
 		return [count, rows2]
-					
+# ---
+
+# calcPeriodTime					
 	def calcPeriodTime(self, range, start_in, end_in ):
 		if range == self.RANGE_PERIOD:
 			# convert start time and end time	
@@ -128,7 +145,9 @@ class SensorMain():
 		end = self.util.getUnixtimeNow()
 		start = end - sec
 		return [ start, end ]
-			
+# ---
+
+# getHeaderDateTime		
 	def getHeaderDateTime(self, count, rows):
 		length = len( rows )
 		first = rows[0]["time"]
@@ -148,7 +167,9 @@ class SensorMain():
 		text += str_count
 		text += " )"
 		return text
+# ---
 
+# makeChartData
 	def makeChartData(self, rows):
 		# data0 : temperature and humidity
 		# data1 : light and noise
@@ -175,5 +196,6 @@ class SensorMain():
 		data1 += "]"
 		data2 += "]"
 		return [data0, data1, data2]
+# ---
 
 # class end

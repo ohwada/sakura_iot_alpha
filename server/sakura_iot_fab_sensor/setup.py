@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # sakura_iot_fab_sensor
-# 2016-05-01 K.OHWADA @ FabLab Kannai
+# 2016-05-01 K.OHWADA 
 
 from setuptools import setup, find_packages
 import os

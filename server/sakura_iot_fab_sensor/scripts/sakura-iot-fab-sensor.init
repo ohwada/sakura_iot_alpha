@@ -48,7 +48,7 @@ fi
 
 #
 # Function to verify if a pid is alive
-#
+# $1: pid file
 is_alive()
 {
    pid=`cat $1` > /dev/null 2>&1
@@ -56,14 +56,26 @@ is_alive()
    return $?
 }
 
-# kill all children process
-killpstree(){
+# kill children process
+# $1: pid file
+kill_ps_children(){
+       pid=`cat $1` > /dev/null 2>&1
+       	local children=`ps --ppid $pid --no-heading | awk '{ print $pid }'`
+	local children=`ps --ppid $pid --no-heading`
+	for child in $children
+	do
+		kill_ps_tree $child 
+	done
+}
+
+# kill all children and parent process
+# $1: pid f
+kill_ps_tree(){
 	local children=`ps --ppid $1 --no-heading | awk '{ print $1 }'`
 	for child in $children
 	do
-		killpstree $child 
+		kill_ps_tree $child 
 	done
-#    echo "kill $1"
 	kill $1 
 }
 
@@ -81,6 +93,7 @@ do_start()
    RETVAL="$?"
 
    if [ $RETVAL != 0 ]; then
+       # start daemon
        start-stop-daemon --start --background --quiet --pidfile $PIDFILE --make-pidfile \
        --exec $DAEMON --chuid $SAKURA_USER --user $SAKURA_USER --umask $UMASK --nicelevel=$NICELEVEL \
        -- $DAEMON_ARGS
@@ -99,12 +112,15 @@ do_stop()
    #   2 if daemon could not be stopped
    #   other if a failure occurred
 
-#   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $SAKURA_USER --pidfile $PIDFILE
-#   RETVAL="$?"
-#   [ "$RETVAL" = "2" ] && return 2
+    # kill children process
+    kill_ps_children $PIDFILE > /dev/null 2>&1 
 
-    pid=`cat $PIDFILE` > /dev/null 2>&1
-    killpstree $pid > /dev/null 2>&1 
+    # stop daemon
+   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --user $SAKURA_USER --pidfile $PIDFILE
+   RETVAL="$?"
+   [ "$RETVAL" = "2" ] && return 2
+
+    # remove pid file
    rm -f $PIDFILE
 
    [ "$RETVAL" = "0"  ] && return 0 || return 1

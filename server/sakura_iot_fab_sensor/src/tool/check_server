@@ -1,3 +1,0 @@
-#!/bin/sh
-# 2016-09-01
-/usr/bin/python /root/bin/check_server.py

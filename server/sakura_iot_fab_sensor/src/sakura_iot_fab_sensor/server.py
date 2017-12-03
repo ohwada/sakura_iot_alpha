@@ -10,6 +10,8 @@ from sensor_manage import SensorManage
 from sensor_api import SensorApi
 from sensor_status import SensorStatus
 from sensor_util import SensorUtil
+from server_conf import ServerConf
+
 import logging
 
 # Flask start	
@@ -18,6 +20,7 @@ app.secret_key = 'koh6GaBo' # random characters
 app.config['SESSION_TYPE'] = 'filesystem'
 
 util = SensorUtil()
+conf = ServerConf()
 
 # global
 g_db_param = None
@@ -32,7 +35,8 @@ def server_run(host, port, basedir):
 	app.logger.addHandler( error_file_handler )
 	app.logger.setLevel( logging.DEBUG )
 	g_conf = util.initConfig( basedir )
-	obj = util.readConf( g_conf )
+	# obj = util.readConf( g_conf )
+	obj = conf.readConfFile( g_conf )
 	if obj:
 		g_db_param = {}
 		g_db_param["db_name"] = obj["db_name"]
